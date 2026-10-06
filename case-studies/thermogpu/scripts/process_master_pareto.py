@@ -111,7 +111,7 @@ def write(path, rows, fields):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     with path.open("w", newline="\n") as f:
-        writer = csv.DictWriter(f, fieldnames=fields)
+        writer = csv.DictWriter(f, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
