@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot the complete ThermoGPU performance/accuracy Pareto terrain."""
+"""Plot ThermoGPU batch-conditioned and conventional Pareto frontiers."""
 
 from __future__ import annotations
 
@@ -27,260 +27,296 @@ def truth(value: str) -> bool:
     return value.strip().lower() == "true"
 
 
+def conventional_pareto(rows):
+    """Nondominated set in (ns/eval, L_inf), independent of batch."""
+    frontier = []
+
+    for r in rows:
+        x = float(r["ns_per_eval"])
+        y = float(r["linf"])
+
+        dominated = False
+
+        for q in rows:
+            if q is r:
+                continue
+
+            qx = float(q["ns_per_eval"])
+            qy = float(q["linf"])
+
+            if (
+                qx <= x
+                and qy <= y
+                and (qx < x or qy < y)
+            ):
+                dominated = True
+                break
+
+        if not dominated:
+            frontier.append(r)
+
+    return sorted(
+        frontier,
+        key=lambda r: (
+            float(r["ns_per_eval"]),
+            float(r["linf"]),
+        ),
+    )
+
+
+def surrogate_pareto(rows):
+    """Conventional nondominated set restricted to surrogates."""
+    return conventional_pareto(rows)
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--input", type=Path, default=INPUT)
     p.add_argument("--output", type=Path, default=OUTPUT)
     args = p.parse_args()
 
-    rows = read_rows(args.input)
+    rows = [
+        r for r in read_rows(args.input)
+        if truth(r["feasible"])
+    ]
 
     if not rows:
         raise SystemExit("master performance terrain is empty")
 
-    rows = [r for r in rows if truth(r["feasible"])]
-
     exact = [r for r in rows if truth(r["exact"])]
     surrogate = [r for r in rows if not truth(r["exact"])]
 
-    # ------------------------------------------------------------------
-    # Group performance-scaling trajectories.
-    # ------------------------------------------------------------------
-
-    scaling = defaultdict(list)
-
-    for r in rows:
-        scaling[r["method"]].append(r)
-
-    for rs in scaling.values():
-        rs.sort(key=lambda r: int(r["batch_size"]))
-
-    # ------------------------------------------------------------------
-    # Figure
-    # ------------------------------------------------------------------
-
-    fig, (ax_scale, ax_pareto) = plt.subplots(
-        1,
-        2,
-        figsize=(16, 7.5),
-        constrained_layout=True,
-    )
-
-    # ================================================================
-    # Panel A: complete performance scaling terrain
-    # ================================================================
-
-    for method, rs in sorted(scaling.items()):
-        x = [int(r["batch_size"]) for r in rs]
-        y = [float(r["ns_per_eval"]) for r in rs]
-
-        is_surrogate = rs[0]["backend"] == "gpu_surrogate"
-
-        ax_scale.plot(
-            x,
-            y,
-            marker="o",
-            linewidth=1.35 if is_surrogate else 2.0,
-            markersize=4.5 if is_surrogate else 6.0,
-            alpha=0.72 if is_surrogate else 0.95,
-            label=method,
-        )
-
-    ax_scale.set_xscale("log")
-    ax_scale.set_yscale("log")
-
-    ax_scale.set_xlabel("Batch size")
-    ax_scale.set_ylabel("Nanoseconds per evaluation")
-    ax_scale.set_title("A. Performance scaling")
-
-    ax_scale.grid(True, which="both", alpha=0.25)
-
-    # ================================================================
-    # Panel B: complete accuracy/performance terrain
-    # ================================================================
-
-    positive_errors = [
-        float(r["linf"])
-        for r in surrogate
-        if float(r["linf"]) > 0.0
-    ]
-
-    if not positive_errors:
-        raise SystemExit("no positive surrogate errors found")
-
-    linthresh = min(positive_errors) / 5.0
-
-    # All exact measurements.
-    exact_groups = defaultdict(list)
-
-    for r in exact:
-        exact_groups[r["method"]].append(r)
-
-    for method, rs in sorted(exact_groups.items()):
-        rs.sort(key=lambda r: float(r["ns_per_eval"]))
-
-        ax_pareto.scatter(
-            [float(r["ns_per_eval"]) for r in rs],
-            [0.0 for _ in rs],
-            s=45,
-            alpha=0.55,
-            label=method,
-        )
-
-    # All surrogate measurements.
-    surrogate_groups = defaultdict(list)
-
-    for r in surrogate:
-        surrogate_groups[int(r["budget"])].append(r)
-
-    for budget, rs in sorted(surrogate_groups.items()):
-        rs.sort(key=lambda r: int(r["batch_size"]))
-
-        ax_pareto.plot(
-            [float(r["ns_per_eval"]) for r in rs],
-            [float(r["linf"]) for r in rs],
-            marker="o",
-            linewidth=1.2,
-            markersize=4.5,
-            alpha=0.55,
-            label=f"GPU surrogate b{budget}",
-        )
-
-    # ---------------------------------------------------------------
-    # Surrogate-only Pareto points.
-    # ---------------------------------------------------------------
-
-    surrogate_frontier = [
-        r for r in surrogate
-        if truth(r["surrogate_pareto"])
-    ]
-
-    ax_pareto.scatter(
-        [float(r["ns_per_eval"]) for r in surrogate_frontier],
-        [float(r["linf"]) for r in surrogate_frontier],
-        s=78,
-        facecolors="none",
-        linewidths=1.4,
-        label="Surrogate frontier",
-    )
-
-    # ---------------------------------------------------------------
-    # Global Pareto frontier.
-    #
-    # Exact points all have zero approximation error. Connecting the
-    # globally nondominated exact measurements therefore shows the
-    # lower performance boundary without inventing a positive error.
-    # ---------------------------------------------------------------
-
-    global_frontier = [
+    # Existing processor flag: best exact method conditioned on batch.
+    batch_frontier = [
         r for r in rows
         if truth(r["global_pareto"])
     ]
 
-    global_frontier.sort(key=lambda r: int(r["batch_size"]))
+    # True two-objective Pareto sets, independent of batch.
+    global_frontier = conventional_pareto(rows)
+    surrogate_frontier = surrogate_pareto(surrogate)
 
-    ax_pareto.scatter(
-        [float(r["ns_per_eval"]) for r in global_frontier],
-        [float(r["linf"]) for r in global_frontier],
-        marker="*",
-        s=175,
-        linewidths=1.1,
-        label="Global Pareto frontier",
-        zorder=10,
+    by_method = defaultdict(list)
+
+    for r in rows:
+        by_method[r["method"]].append(r)
+
+    for rs in by_method.values():
+        rs.sort(key=lambda r: int(r["batch_size"]))
+
+    surrogate_by_budget = defaultdict(list)
+
+    for r in surrogate:
+        surrogate_by_budget[int(r["budget"])].append(r)
+
+    for rs in surrogate_by_budget.values():
+        rs.sort(key=lambda r: int(r["batch_size"]))
+
+    # ===============================================================
+    # Figure
+    # ===============================================================
+
+    fig, (ax_all, ax_sur) = plt.subplots(
+        1,
+        2,
+        figsize=(15.5, 7.2),
+        constrained_layout=True,
+        gridspec_kw={"width_ratios": (1.25, 1.0)},
     )
 
-    # Label the global frontier so the CPU -> OpenMP -> GPU transition
-    # is explicit.
-    for r in global_frontier:
-        batch = int(r["batch_size"])
+    # ===============================================================
+    # A. Complete performance terrain
+    # ===============================================================
 
-        ax_pareto.annotate(
-            f"{r['method']}\nn={batch:,}",
-            (
-                float(r["ns_per_eval"]),
-                float(r["linf"]),
-            ),
-            xytext=(0, 11),
-            textcoords="offset points",
-            ha="center",
-            va="bottom",
-            fontsize=7.5,
+    for method, rs in sorted(by_method.items()):
+        is_surrogate = rs[0]["backend"] == "gpu_surrogate"
+
+        ax_all.plot(
+            [int(r["batch_size"]) for r in rs],
+            [float(r["ns_per_eval"]) for r in rs],
+            marker="o",
+            linewidth=1.25 if is_surrogate else 2.0,
+            markersize=4 if is_surrogate else 5.5,
+            alpha=0.58 if is_surrogate else 0.92,
+            label=method,
         )
 
-    ax_pareto.axhline(
-        0.0,
-        linewidth=1.0,
-        linestyle="--",
-        alpha=0.7,
+    # Fastest exact implementation at each fixed batch size.
+    ax_all.scatter(
+        [int(r["batch_size"]) for r in batch_frontier],
+        [float(r["ns_per_eval"]) for r in batch_frontier],
+        marker="*",
+        s=190,
+        linewidths=0.9,
+        zorder=10,
+        label="Batch-conditioned best-exact frontier",
     )
 
-    ax_pareto.set_xscale("log")
-    ax_pareto.set_yscale(
-        "symlog",
-        linthresh=linthresh,
+    # Conventional global Pareto set.
+    #
+    # This is evaluated in (ns/eval, L_inf) space without conditioning
+    # on batch. Mark its members separately on the scaling plot.
+    ax_all.scatter(
+        [int(r["batch_size"]) for r in global_frontier],
+        [float(r["ns_per_eval"]) for r in global_frontier],
+        marker="D",
+        s=75,
+        facecolors="none",
+        linewidths=1.8,
+        zorder=11,
+        label="Conventional global Pareto set",
     )
 
-    ax_pareto.set_xlabel("Nanoseconds per evaluation")
-    ax_pareto.set_ylabel(
+    ax_all.set_xscale("log")
+    ax_all.set_yscale("log")
+    ax_all.set_xlabel("Batch size")
+    ax_all.set_ylabel("Nanoseconds per evaluation")
+    ax_all.set_title(
+        "A. Performance terrain and exact implementation frontier"
+    )
+    ax_all.grid(True, which="both", alpha=0.22)
+
+    ax_all.legend(
+        fontsize=7.5,
+        ncol=2,
+        loc="best",
+    )
+
+    # ===============================================================
+    # B. Conventional surrogate Pareto frontier
+    # ===============================================================
+
+    for budget, rs in sorted(surrogate_by_budget.items()):
+        ax_sur.plot(
+            [float(r["ns_per_eval"]) for r in rs],
+            [float(r["linf"]) for r in rs],
+            marker="o",
+            linewidth=1.35,
+            markersize=5,
+            alpha=0.55,
+            label=f"budget {budget}",
+        )
+
+    # Highlight only points that are genuinely nondominated when batch
+    # is NOT treated as a constraint.
+    ax_sur.scatter(
+        [float(r["ns_per_eval"]) for r in surrogate_frontier],
+        [float(r["linf"]) for r in surrogate_frontier],
+        s=105,
+        facecolors="none",
+        linewidths=1.8,
+        zorder=10,
+        label="Conventional surrogate Pareto frontier",
+    )
+
+    # Connect the conventional surrogate frontier in performance order.
+    if len(surrogate_frontier) > 1:
+        sf = sorted(
+            surrogate_frontier,
+            key=lambda r: float(r["ns_per_eval"]),
+        )
+
+        ax_sur.plot(
+            [float(r["ns_per_eval"]) for r in sf],
+            [float(r["linf"]) for r in sf],
+            linewidth=2.2,
+            linestyle="--",
+            alpha=0.8,
+        )
+
+    ax_sur.set_xscale("log")
+    ax_sur.set_yscale("log")
+
+    ax_sur.set_xlabel("Nanoseconds per evaluation")
+    ax_sur.set_ylabel(
         r"$L_\infty$ absolute error in compressibility factor $Z$"
     )
-    ax_pareto.set_title("B. Accuracy–performance Pareto terrain")
 
-    ax_pareto.grid(True, which="both", alpha=0.25)
-
-    ax_pareto.text(
-        0.02,
-        0.035,
-        "Exact computation",
-        transform=ax_pareto.transAxes,
-        fontsize=9,
+    ax_sur.set_title(
+        "B. Conventional surrogate Pareto frontier"
     )
 
-    # ------------------------------------------------------------------
-    # Figure-level legend.
-    #
-    # De-duplicate labels because exact methods occur in both panels.
-    # ------------------------------------------------------------------
+    ax_sur.grid(True, which="both", alpha=0.22)
 
-    handles = []
-    labels = []
-    seen = set()
+    ax_sur.annotate(
+        "Better: down and left",
+        xy=(0.72, 0.72),
+        xytext=(0.92, 0.90),
+        xycoords="axes fraction",
+        textcoords="axes fraction",
+        ha="right",
+        va="top",
+        fontsize=9,
+        arrowprops={
+            "arrowstyle": "->",
+            "linewidth": 1.0,
+        },
+    )
 
-    for ax in (ax_scale, ax_pareto):
-        h, l = ax.get_legend_handles_labels()
-
-        for handle, label in zip(h, l):
-            if label not in seen:
-                seen.add(label)
-                handles.append(handle)
-                labels.append(label)
-
-    fig.legend(
-        handles,
-        labels,
-        loc="outside lower center",
-        ncol=4,
-        fontsize=8.5,
+    ax_sur.legend(
+        title="TDAR budget",
+        fontsize=8,
+        title_fontsize=8,
+        loc="best",
     )
 
     fig.suptitle(
-        "ThermoGPU methane Z: complete computation Pareto frontier\n"
-        "CPU scalar · CPU parallel · direct GPU · GPU CPWA-ReLU surrogates",
+        "ThermoGPU methane Z: performance and Pareto structure",
         fontsize=15,
     )
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
     fig.savefig(args.output, dpi=180)
     plt.close(fig)
 
     print(args.output)
+
     print(
         f"records={len(rows)} "
         f"exact={len(exact)} "
-        f"surrogate={len(surrogate)} "
-        f"global_frontier={len(global_frontier)} "
-        f"surrogate_frontier={len(surrogate_frontier)}"
+        f"surrogate={len(surrogate)}"
     )
+
+    print(
+        "batch-conditioned best-exact frontier: "
+        f"{len(batch_frontier)} points"
+    )
+
+    print(
+        "conventional surrogate Pareto frontier: "
+        f"{len(surrogate_frontier)} points"
+    )
+
+    print(
+        "conventional global Pareto frontier: "
+        f"{len(global_frontier)} points"
+    )
+
+    print()
+    print("CONVENTIONAL GLOBAL PARETO SET")
+
+    for r in global_frontier:
+        print(
+            f"  {r['method']:24s} "
+            f"batch={int(r['batch_size']):7d} "
+            f"ns/eval={float(r['ns_per_eval']):12.6f} "
+            f"Linf={float(r['linf']):.8g}"
+        )
+
+    print()
+    print("CONVENTIONAL SURROGATE PARETO SET")
+
+    for r in surrogate_frontier:
+        print(
+            f"  budget={int(r['budget']):3d} "
+            f"batch={int(r['batch_size']):7d} "
+            f"ns/eval={float(r['ns_per_eval']):12.6f} "
+            f"Linf={float(r['linf']):.8g}"
+        )
 
 
 if __name__ == "__main__":

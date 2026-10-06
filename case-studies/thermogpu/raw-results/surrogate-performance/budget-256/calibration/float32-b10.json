@@ -1,0 +1,36 @@
+{
+  "schema_version": 2,
+  "profile_kind": "native-dag-execution",
+  "name": "thermogpu-b256-float32-n10",
+  "dtype": "float32",
+  "batch_size": 10,
+  "backend": "gpu",
+  "device": "cuda:0",
+  "policy_costs": {
+    "compact-lookahead-k32": 73166.70380532742,
+    "compact-lookahead-k64": 70976.1050529778,
+    "compact-min-live": 71507.70397856832,
+    "grouped-lookahead-k32": 1391143.0491134524,
+    "grouped-lookahead-k64": 1013874.0064576268,
+    "grouped-min-live": 587916.3043573499
+  },
+  "policy_failures": {},
+  "metadata": {
+    "budget": 256,
+    "repeats": 7,
+    "screen_repeats": 2,
+    "confirm_top": 2,
+    "near_tie_percent": 10.0,
+    "warmup": 2,
+    "seed": 20261004,
+    "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/artifacts/methane-z-b256-native.cpwa",
+    "jax_version": "0.11.2",
+    "jax_backend": "gpu",
+    "jax_device": "cuda:0",
+    "jax_devices": [
+      "cuda:0"
+    ],
+    "canonical_gpu_run": true,
+    "calibration_strategy": "screen-then-confirm-v1"
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b256-float32-n1",
+    "dtype": "float32",
+    "batch_size": 1,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 443284.0505614877,
+      "compact-lookahead-k64": 632070.004940033,
+      "compact-min-live": 510104.0005683899,
+      "grouped-lookahead-k32": 2715954.5570611954,
+      "grouped-lookahead-k64": 2672512.549906969,
+      "grouped-min-live": 2996112.045366317
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 256,
+      "repeats": 7,
+      "screen_repeats": 2,
+      "confirm_top": 2,
+      "near_tie_percent": 10.0,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/artifacts/methane-z-b256-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true,
+      "calibration_strategy": "screen-then-confirm-v1"
+    }
+  },
+  "selected_policy": "compact-lookahead-k32",
+  "selected_ns_per_eval": 443284.0505614877,
+  "screen_ranking": [
+    "compact-min-live",
+    "compact-lookahead-k64",
+    "compact-lookahead-k32",
+    "grouped-lookahead-k64",
+    "grouped-lookahead-k32",
+    "grouped-min-live"
+  ],
+  "confirmed_finalists": [
+    "compact-min-live",
+    "compact-lookahead-k64",
+    "compact-lookahead-k32"
+  ],
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 3.4836975389625877,
+      "compile_first_execution_seconds": 1.1873285890324041,
+      "screen_repeats": 2,
+      "screen_ns_per_eval": 474388.47832381725,
+      "status": "confirmed",
+      "confirmed_repeats": 7,
+      "median_execution_seconds": 0.0005101040005683899,
+      "ns_per_eval": 510104.0005683899
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 3.803718890994787,
+      "compile_first_execution_seconds": 120.86665089195594,
+      "screen_repeats": 2,
+      "screen_ns_per_eval": 2996112.045366317,
+      "status": "screened-out",
+      "ns_per_eval": 2996112.045366317
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 11.569681280991063,
+      "compile_first_execution_seconds": 0.8835529739735648,
+      "screen_repeats": 2,
+      "screen_ns_per_eval": 503722.985740751,
+      "status": "confirmed",
+      "confirmed_repeats": 7,
+      "median_execution_seconds": 0.0004432840505614877,
+      "ns_per_eval": 443284.0505614877
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 12.260920066968538,
+      "compile_first_execution_seconds": 118.1144536169013,
+      "screen_repeats": 2,
+      "screen_ns_per_eval": 2715954.5570611954,
+      "status": "screened-out",
+      "ns_per_eval": 2715954.5570611954
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 13.377949581947178,
+      "compile_first_execution_seconds": 0.8427227329229936,
+      "screen_repeats": 2,
+      "screen_ns_per_eval": 496467.51722320914,
+      "status": "confirmed",
+      "confirmed_repeats": 7,
+      "median_execution_seconds": 0.000632070004940033,
+      "ns_per_eval": 632070.004940033
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 13.884244941989891,
+      "compile_first_execution_seconds": 117.85520849504974,
+      "screen_repeats": 2,
+      "screen_ns_per_eval": 2672512.549906969,
+      "status": "screened-out",
+      "ns_per_eval": 2672512.549906969
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0004372670082375407,
+      0.0005115099484100938,
+      0.0009542100597172976,
+      0.0005665150238201022,
+      0.0004985419800505042,
+      0.0005101040005683899,
+      0.0004999070661142468
+    ],
+    "grouped-min-live": [
+      0.0029996971134096384,
+      0.0029925269773229957
+    ],
+    "compact-lookahead-k32": [
+      0.0005117299733683467,
+      0.0004957159981131554,
+      0.0007429879624396563,
+      0.0004373909905552864,
+      0.00042249204125255346,
+      0.0004432840505614877,
+      0.0004394409479573369
+    ],
+    "grouped-lookahead-k32": [
+      0.0027281270595267415,
+      0.0027037820545956492
+    ],
+    "compact-lookahead-k64": [
+      0.0005535850068554282,
+      0.00043935002759099007,
+      0.0012403260916471481,
+      0.0006924140034243464,
+      0.0006817539688199759,
+      0.000632070004940033,
+      0.0004124520346522331
+    ],
+    "grouped-lookahead-k64": [
+      0.0026938250521197915,
+      0.0026512000476941466
+    ]
+  }
+}

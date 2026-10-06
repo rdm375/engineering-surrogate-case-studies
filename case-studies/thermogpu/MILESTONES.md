@@ -1,0 +1,171 @@
+# ThermoGPU Engineering Surrogate Case Study — V1 Milestones
+
+## Objective
+
+Determine where direct thermodynamic computation and surrogate evaluation are
+advantageous across workload size, hardware execution strategy, surrogate
+complexity, and approximation accuracy.
+
+V1 is complete when every experiment necessary to support or falsify the
+engineering conclusions has been completed. V1 does not require populating
+every possible budget × batch combination when a combination is demonstrably
+infeasible or cannot materially affect the conclusions.
+
+## Milestones
+
+| ID | Milestone | Status | V1 evidence |
+|---|---|---|---|
+| M1 | Define and freeze V1 experiment | Complete | `configs/study-v1.toml` |
+| M2 | Validate direct ThermoGPU calculation | Complete | Direct validation evidence |
+| M3 | Benchmark direct execution methods | Complete | CPU scalar, CPU OpenMP, GPU resident, GPU E2E |
+| M4 | Build TDAR surrogate family | Complete | Budgets 16, 32, 64, 128, 256 |
+| M5 | Validate surrogate accuracy | Complete | Shared frozen validation set; RMSE, p99, Linf |
+| M6 | Compile exact CPWA-ReLU DAGs | Complete | Native `.cpwa` artifacts |
+| M7 | Calibrate GPU surrogate execution | Partial | Completed calibration plus retained failure evidence |
+| M8 | Automate experiment pipeline | Complete | Resumable `scripts/run_study.py` |
+| M9 | Construct master performance terrain | Complete | CPU, parallel CPU, direct GPU, GPU surrogates |
+| M10 | Define Pareto analyses | Complete | Batch-conditioned and conventional frontiers |
+| M11 | Produce publication-quality figures | Near complete | Performance/Pareto figures |
+| M12 | Interpret engineering results | In progress | Crossover, accuracy-cost, dominance, scaling, feasibility |
+| M13 | Perform final reproducibility run | Pending | Clean execution from frozen inputs |
+| M14 | Generate V1 report | Pending | Reproducible Markdown report |
+| M15 | Freeze V1 release | Pending | Clean repository, commit, tag |
+
+## Frontier terminology
+
+### Batch-conditioned best-exact frontier
+
+For each fixed batch size, select the fastest exact implementation from the
+available exact methods.
+
+This frontier answers:
+
+> Given this workload size, which exact implementation should be used?
+
+It captures the observed transition among scalar CPU, parallel CPU, and direct
+GPU execution as batch size increases.
+
+### Conventional surrogate Pareto frontier
+
+Compute nondominance among surrogate measurements in the two objectives
+
+- nanoseconds per evaluation, and
+- Linf absolute error.
+
+Batch size is not treated as a constraint.
+
+This frontier answers:
+
+> Among measured surrogate operating points, which choices are not dominated
+> simultaneously in speed and accuracy?
+
+### Conventional global Pareto frontier
+
+Compute the same two-objective nondominance relation over all feasible methods,
+including exact and approximate computation.
+
+This frontier answers:
+
+> If batch size is ignored as a constraint, which measured operating points are
+> globally nondominated in speed and error?
+
+Because exact methods have zero approximation error, a sufficiently fast exact
+method may dominate the entire surrogate family. That is a valid engineering
+result rather than a failure of the surrogate experiment.
+
+## M12 — Engineering interpretation
+
+The analysis must address the following before V1 is frozen.
+
+### M12.1 Exact crossover analysis
+
+Determine the workload regions in which the preferred exact implementation is:
+
+- scalar CPU,
+- parallel CPU,
+- direct GPU resident, or
+- direct GPU end-to-end.
+
+Report crossover locations and speedup factors.
+
+### M12.2 Surrogate cost-of-accuracy analysis
+
+For each surrogate budget, quantify:
+
+- RMSE,
+- p99 absolute error,
+- Linf absolute error,
+- execution cost,
+- throughput, and
+- cost relative to the best exact method at the same batch size.
+
+### M12.3 Dominance analysis
+
+Determine whether any surrogate measurement dominates an appropriate exact
+baseline and whether any surrogate remains on the conventional global Pareto
+frontier.
+
+Distinguish conventional global dominance from comparisons conditioned on
+batch size.
+
+### M12.4 DAG scaling analysis
+
+Relate surrogate budget and accuracy to native CPWA-ReLU representation size,
+including:
+
+- affine nodes,
+- min nodes,
+- max nodes,
+- total nodes,
+- artifact size,
+- lowering/compilation cost where available, and
+- steady-state execution cost.
+
+The purpose is to identify why increasing approximation accuracy does or does
+not remain computationally attractive.
+
+### M12.5 Feasibility boundary
+
+Treat failed or impractical calibration combinations as experimental evidence.
+
+Record each requested budget × batch combination as one of:
+
+- `complete`
+- `failed`
+- `infeasible`
+- `pending`
+
+A failed or infeasible point must retain enough evidence to explain the
+classification.
+
+### M12.6 V1 measurement decision
+
+Before running additional expensive experiments, determine whether the missing
+measurement could change any V1 conclusion.
+
+Additional measurements are required only when they can plausibly:
+
+- change an implementation crossover,
+- change a Pareto frontier,
+- change a surrogate accuracy/cost conclusion,
+- establish an unknown feasibility boundary, or
+- resolve an unexplained numerical or performance anomaly.
+
+## V1 exit criteria
+
+V1 may be frozen when:
+
+1. direct exact methods are validated and benchmarked;
+2. surrogate accuracy is validated on the frozen common validation set;
+3. all measurements material to the conclusions are complete or have a
+   documented failed/infeasible classification;
+4. batch-conditioned and conventional Pareto analyses are reproducible;
+5. crossover, dominance, DAG-scaling, and feasibility conclusions are
+   documented;
+6. publication figures regenerate from retained evidence;
+7. the final report regenerates from retained evidence;
+8. the automated pipeline and tests pass from a clean checkout; and
+9. repository provenance is sufficient to reproduce the reported results.
+
+The completion criterion is scientific sufficiency, not rectangular coverage
+of every possible experiment combination.

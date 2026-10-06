@@ -1,0 +1,17 @@
+{
+  "status": "failed",
+  "budget": 128,
+  "batch_size": 1000000,
+  "dtype": "float32",
+  "backend": "gpu",
+  "device": "cuda:0",
+  "all_failures_resource_related": true,
+  "policy_failures": {
+    "compact-min-live": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.76GiB with allocator GPU_0_bfc on device 0. [executable_name='jit_evaluate'] [tf-allocator-allocation-error='']",
+    "grouped-min-live": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 10.59GiB with allocator GPU_0_bfc on device 0. [executable_name='jit_evaluate'] [tf-allocator-allocation-error='']",
+    "compact-lookahead-k32": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.76GiB with allocator GPU_0_bfc on device 0. [executable_name='jit_evaluate'] [tf-allocator-allocation-error='']",
+    "grouped-lookahead-k32": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 14.64GiB with allocator GPU_0_bfc on device 0. [executable_name='jit_evaluate'] [tf-allocator-allocation-error='']",
+    "compact-lookahead-k64": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 8.76GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error=''] [executable_name='jit_evaluate']",
+    "grouped-lookahead-k64": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 17.69GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error=''] [executable_name='jit_evaluate']"
+  }
+}
