@@ -1,0 +1,24 @@
+{
+  "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/artifacts/methane-z-b128-native.cpwa",
+  "budget": 128,
+  "command": [
+    "/nvme/Sync/engineering-surrogate-case-studies/.venv/bin/python",
+    "/nvme/Sync/cpwa-relu/benchmarks/build_native_dag_artifact.py",
+    "--source",
+    "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b128.npz",
+    "--output",
+    "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogate-performance/budget-128/artifacts/methane-z-b128-native.cpwa"
+  ],
+  "cpwa_relu": {
+    "branch": "master",
+    "commit": "6ac34968992ae17c079f92ba37c0deacd5b69a19",
+    "describe": "v0.2.0",
+    "dirty": false,
+    "path": "/nvme/Sync/cpwa-relu",
+    "remote": "git@github.com:rdm375/cpwa-relu.git"
+  },
+  "slurm": {},
+  "source": "case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b128.npz",
+  "status": "ok",
+  "wall_seconds": 5.563454151968472
+}

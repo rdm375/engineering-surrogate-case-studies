@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b64-float32-n1000",
+    "dtype": "float32",
+    "batch_size": 1000,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 1247.5319672375917,
+      "compact-lookahead-k64": 1286.0430870205164,
+      "compact-min-live": 1322.433934547007,
+      "grouped-lookahead-k32": 1840.0849075987935,
+      "grouped-lookahead-k64": 1923.1579499319196,
+      "grouped-min-live": 2680.210047401488
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 64,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/artifacts/methane-z-b64-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "compact-lookahead-k32",
+  "selected_ns_per_eval": 1247.5319672375917,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.38938240299467,
+      "compile_first_execution_seconds": 18.368652416043915,
+      "median_execution_seconds": 0.001322433934547007,
+      "ns_per_eval": 1322.433934547007
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.24637715402059257,
+      "compile_first_execution_seconds": 35.25377188203856,
+      "median_execution_seconds": 0.002680210047401488,
+      "ns_per_eval": 2680.210047401488
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.2190797399962321,
+      "compile_first_execution_seconds": 20.235450198990293,
+      "median_execution_seconds": 0.0012475319672375917,
+      "ns_per_eval": 1247.5319672375917
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.27603832399472594,
+      "compile_first_execution_seconds": 26.378275019000284,
+      "median_execution_seconds": 0.0018400849075987935,
+      "ns_per_eval": 1840.0849075987935
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.27492280304431915,
+      "compile_first_execution_seconds": 18.75542895507533,
+      "median_execution_seconds": 0.0012860430870205164,
+      "ns_per_eval": 1286.0430870205164
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.3161343480460346,
+      "compile_first_execution_seconds": 28.094319286989048,
+      "median_execution_seconds": 0.0019231579499319196,
+      "ns_per_eval": 1923.1579499319196
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0013723329175263643,
+      0.0012583780335262418,
+      0.0013689190382137895,
+      0.001322433934547007,
+      0.0013684550067409873,
+      0.0012852709041908383,
+      0.0012327430304139853
+    ],
+    "grouped-min-live": [
+      0.0027569199446588755,
+      0.0027125260094180703,
+      0.002700821030884981,
+      0.0026350830448791385,
+      0.002680210047401488,
+      0.0026179139968007803,
+      0.002649754984304309
+    ],
+    "compact-lookahead-k32": [
+      0.0013699301052838564,
+      0.0012526221107691526,
+      0.0011846140259876847,
+      0.0012228279374539852,
+      0.0012534679844975471,
+      0.0012475319672375917,
+      0.0012444950407370925
+    ],
+    "grouped-lookahead-k32": [
+      0.0019268770702183247,
+      0.0020329930121079087,
+      0.0019688119646161795,
+      0.0018400849075987935,
+      0.0017870489973574877,
+      0.001759679988026619,
+      0.0018252069130539894
+    ],
+    "compact-lookahead-k64": [
+      0.0012860430870205164,
+      0.0012360820546746254,
+      0.0012924580369144678,
+      0.0013857909943908453,
+      0.001371170044876635,
+      0.0012686230475082994,
+      0.001229155925102532
+    ],
+    "grouped-lookahead-k64": [
+      0.0016628099838271737,
+      0.0016725490568205714,
+      0.0019604560220614076,
+      0.002081137034110725,
+      0.0019314400851726532,
+      0.0019231579499319196,
+      0.0017877009231597185
+    ]
+  }
+}

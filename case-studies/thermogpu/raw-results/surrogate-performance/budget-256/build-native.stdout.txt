@@ -1,0 +1,10 @@
+artifact:        /nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogate-performance/budget-256/artifacts/methane-z-b256-native.cpwa
+pieces:          464
+subsets:         698
+lattice time:    27.4912304939935
+DAG time:        0.16687844006810337
+nodes:           24706
+affine nodes:    464
+min nodes:       23545
+max nodes:       697
+binary ops:      24242
