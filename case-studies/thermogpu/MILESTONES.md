@@ -25,10 +25,10 @@ infeasible or cannot materially affect the conclusions.
 | M8 | Automate experiment pipeline | Complete | Resumable `scripts/run_study.py` |
 | M9 | Construct master performance terrain | Complete | CPU, parallel CPU, direct GPU, GPU surrogates |
 | M10 | Define Pareto analyses | Complete | Batch-conditioned and conventional frontiers |
-| M11 | Produce publication-quality figures | Near complete | Performance/Pareto figures |
+| M11 | Produce publication-quality figures | Complete | Direct, accuracy, master-terrain, and Pareto figures are reproducible pipeline outputs |
 | M12 | Interpret engineering results | Complete | Automated crossover, accuracy-cost, dominance, empirical scaling, feasibility boundary, and V1 conclusion generation |
 | M13 | Perform final reproducibility run | Complete | Retained evidence regenerated all V1 scientific results through M12 analysis; processed data were unchanged and regenerated figures were pixel-identical |
-| M14 | Generate V1 report | Pending | Reproducible Markdown report |
+| M14 | Generate V1 report | Complete | Generated Markdown report consumes authoritative M12 analysis and reproducible publication figures |
 | M15 | Freeze V1 release | Pending | Clean repository, commit, tag |
 
 ## Frontier terminology
@@ -201,6 +201,18 @@ The reproduced engineering conclusion remained:
 
 The reproduction run does not rerun expensive experimental measurements merely
 to reproduce derived scientific conclusions.
+
+## M14 — V1 report result
+
+The V1 report is generated from the authoritative processed evidence and M12
+`study-summary.json`; it no longer depends on the legacy surrogate-performance
+aggregate. The reproduction pipeline now regenerates the master performance
+terrain and Pareto figures before regenerating the report.
+
+The report records the frozen design, exact-method crossover, surrogate accuracy
+and representation scaling, dominance and Pareto results, feasibility boundary,
+measurement sufficiency, engineering interpretation, limitations, and the
+evidence-only reproduction command.
 
 ## V1 exit criteria
 

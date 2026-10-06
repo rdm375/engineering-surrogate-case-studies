@@ -476,3 +476,47 @@ def test_legacy_surrogate_benchmark_is_not_required_reproduction_evidence():
         "legacy aggregate not required; authoritative performance evidence "
         "is retained by calibrate"
     ]
+
+
+def test_reproduction_pipeline_includes_master_figures_before_report():
+    m = load_module()
+
+    class Args:
+        config = ROOT / "case-studies/thermogpu/configs/study-v1.toml"
+        thermogpu_root = Path("/nvme/Sync/ThermoGPU")
+        tdar_root = Path("/nvme/Sync/tdar")
+        cpwa_relu_root = Path("/nvme/Sync/cpwa-relu")
+        cpwa_python = Path("/nvme/Sync/cpwa-relu/.venv/bin/python")
+        dtype = "float32"
+        repeats = 7
+        warmup = 2
+        calibration_seed = 20261004
+        benchmark_seed = 20261005
+
+    stages = m.build_stages(Args())
+    names = [stage.name for stage in stages]
+
+    assert names.index("master-pareto") < names.index("master-plot")
+    assert names.index("master-plot") < names.index("report")
+    assert names.index("pareto-plot") < names.index("report")
+    assert any(
+        str(path).endswith("master-performance-terrain.png")
+        for path in stages[names.index("master-plot")].outputs
+    )
+    assert any(
+        str(path).endswith("pareto-frontier.png")
+        for path in stages[names.index("pareto-plot")].outputs
+    )
+
+
+def test_report_generator_uses_authoritative_m12_outputs():
+    script = (
+        ROOT
+        / "case-studies/thermogpu/scripts/generate_report.py"
+    ).read_text()
+
+    assert "study-summary.json" in script
+    assert "master-performance-terrain.csv" in script
+    assert "feasibility-analysis.csv" in script
+    assert "surrogate-performance.csv" not in script
+    assert "--reproduce" in script
