@@ -1,0 +1,11 @@
+category,relationship,x,y,exponent,points
+representation,simplices_vs_budget,budget,simplices,1.04025453952233,5
+representation,min_nodes_vs_budget,budget,min_nodes,2.102641340018446,5
+representation,total_nodes_vs_budget,budget,total_nodes,1.965699458761194,5
+representation,total_nodes_vs_simplices,simplices,total_nodes,1.8888846123784893,5
+execution,steady_state_time_vs_total_nodes,total_nodes,steady_state_ns_per_eval,0.6740582443243848,5
+accuracy,linf_vs_budget,budget,linf,-1.5296392070490175,5
+accuracy,linf_vs_simplices,simplices,linf,-1.466693051694605,5
+accuracy_cost,total_nodes_vs_linf,linf,total_nodes,-1.2207047869485295,5
+accuracy_cost,min_nodes_vs_linf,linf,min_nodes,-1.3146882115107006,5
+accuracy_cost,steady_state_time_vs_linf,linf,steady_state_ns_per_eval,-0.8244921755225483,5

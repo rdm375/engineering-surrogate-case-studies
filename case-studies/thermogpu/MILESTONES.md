@@ -26,7 +26,7 @@ infeasible or cannot materially affect the conclusions.
 | M9 | Construct master performance terrain | Complete | CPU, parallel CPU, direct GPU, GPU surrogates |
 | M10 | Define Pareto analyses | Complete | Batch-conditioned and conventional frontiers |
 | M11 | Produce publication-quality figures | Near complete | Performance/Pareto figures |
-| M12 | Interpret engineering results | In progress | Crossover, accuracy-cost, dominance, scaling, feasibility |
+| M12 | Interpret engineering results | Complete | Automated crossover, accuracy-cost, dominance, empirical scaling, feasibility boundary, and V1 conclusion generation |
 | M13 | Perform final reproducibility run | Pending | Clean execution from frozen inputs |
 | M14 | Generate V1 report | Pending | Reproducible Markdown report |
 | M15 | Freeze V1 release | Pending | Clean repository, commit, tag |
@@ -128,23 +128,42 @@ not remain computationally attractive.
 
 Treat failed or impractical calibration combinations as experimental evidence.
 
-Record each requested budget × batch combination as one of:
+Record each requested budget × batch combination using explicit measurement
+semantics:
 
-- `complete`
-- `failed`
-- `infeasible`
-- `pending`
+- `complete` — a valid retained measurement exists;
+- `resource_failure` — the experiment was attempted and failed because of a
+  documented hardware/resource limit;
+- `failed` — the experiment was attempted but failed for another or
+  unclassified reason;
+- `deferred` — the experiment was deliberately not run because existing
+  evidence is sufficient for the current V1 conclusion; or
+- `pending` — the experiment remains unresolved.
 
-A failed or infeasible point must retain enough evidence to explain the
-classification.
+A failure must retain enough evidence to explain its classification. Deferred
+measurements are measurement decisions, not failed experiments.
 
 ### Automated M12 evidence
 
 `scripts/analyze_study.py` derives the reusable M12 evidence tables from retained
 measurements. It writes exact crossover, surrogate accuracy/cost, dominance,
-DAG-scaling, feasibility, and a machine-readable `study-summary.json`. The
-processor accepts explicit input/output paths so the same analysis contract can
-be reused by later engineering case studies rather than reimplemented per model.
+DAG-scaling, empirical scaling, feasibility, and a machine-readable
+`study-summary.json`. The summary records representation and accuracy/cost
+scaling exponents, incremental tradeoffs, exact-method transitions, resource
+boundaries, dominance conclusions, and measurement sufficiency. Empirical
+power-law fits describe the measured range and are not asserted as asymptotic
+complexity results.
+
+For ThermoGPU V1, all 31 measured surrogate operating points are dominated by
+the best exact implementation at the same batch size and no surrogate point is
+globally Pareto-optimal. The B128 × 1,000,000 calibration establishes a
+hardware-conditioned GPU-memory resource boundary. The three larger B256
+measurements are deliberately deferred because they cannot change the current
+V1 dominance conclusion. There are no unresolved pending cells.
+
+The processor accepts explicit input/output paths so the same analysis contract
+can be reused by later engineering case studies rather than reimplemented per
+model.
 
 ### M12.6 V1 measurement decision
 
@@ -165,8 +184,9 @@ V1 may be frozen when:
 
 1. direct exact methods are validated and benchmarked;
 2. surrogate accuracy is validated on the frozen common validation set;
-3. all measurements material to the conclusions are complete or have a
-   documented failed/infeasible classification;
+3. all measurements material to the conclusions are complete, have a
+   documented failure classification, or are explicitly deferred with a
+   scientific-sufficiency justification;
 4. batch-conditioned and conventional Pareto analyses are reproducible;
 5. crossover, dominance, DAG-scaling, and feasibility conclusions are
    documented;

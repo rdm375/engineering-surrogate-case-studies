@@ -6,6 +6,7 @@ import argparse
 import csv
 import io
 import json
+import math
 import zipfile
 from collections import Counter
 from pathlib import Path
@@ -181,13 +182,272 @@ def dag_scaling(accuracy: list[dict[str, str]], perf_root: Path) -> list[dict]:
     return out
 
 
-def feasibility(completeness: list[dict[str, str]]) -> list[dict]:
-    return [{
-        "budget": int(r["budget"]),
-        "batch_size": int(r["batch_size"]),
-        "status": r["status"],
-        "evidence": r.get("evidence", ""),
-    } for r in completeness]
+def loglog_exponent(rows: list[dict], x: str, y: str) -> float | None:
+    """Fit y ~ x**p in log-log space and return p."""
+    pairs = []
+    for r in rows:
+        try:
+            xv = float(r[x])
+            yv = float(r[y])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if xv > 0.0 and yv > 0.0 and math.isfinite(xv) and math.isfinite(yv):
+            pairs.append((math.log(xv), math.log(yv)))
+
+    if len(pairs) < 2:
+        return None
+
+    xs = [x for x, _ in pairs]
+    ys = [y for _, y in pairs]
+    xm = sum(xs) / len(xs)
+    ym = sum(ys) / len(ys)
+    denom = sum((x - xm) ** 2 for x in xs)
+    if denom == 0.0:
+        return None
+    return sum((x - xm) * (y - ym) for x, y in pairs) / denom
+
+
+def scaling_analysis(dags: list[dict]) -> tuple[list[dict], dict, dict, list[dict]]:
+    """Quantify empirical representation, execution, and accuracy scaling."""
+    fits = [
+        ("representation", "simplices_vs_budget", "budget", "simplices"),
+        ("representation", "min_nodes_vs_budget", "budget", "min_nodes"),
+        ("representation", "total_nodes_vs_budget", "budget", "total_nodes"),
+        ("representation", "total_nodes_vs_simplices", "simplices", "total_nodes"),
+        (
+            "execution",
+            "steady_state_time_vs_total_nodes",
+            "total_nodes",
+            "steady_state_ns_per_eval",
+        ),
+        ("accuracy", "linf_vs_budget", "budget", "linf"),
+        ("accuracy", "linf_vs_simplices", "simplices", "linf"),
+        ("accuracy_cost", "total_nodes_vs_linf", "linf", "total_nodes"),
+        ("accuracy_cost", "min_nodes_vs_linf", "linf", "min_nodes"),
+        (
+            "accuracy_cost",
+            "steady_state_time_vs_linf",
+            "linf",
+            "steady_state_ns_per_eval",
+        ),
+    ]
+
+    rows = []
+    fit_map = {}
+    for category, name, x, y in fits:
+        exponent = loglog_exponent(dags, x, y)
+        fit_map[name] = exponent
+        rows.append({
+            "category": category,
+            "relationship": name,
+            "x": x,
+            "y": y,
+            "exponent": "" if exponent is None else exponent,
+            "points": sum(
+                1
+                for r in dags
+                if str(r.get(x, "")) != "" and str(r.get(y, "")) != ""
+            ),
+        })
+
+    incremental = []
+    ordered = sorted(dags, key=lambda r: int(r["budget"]))
+    for a, b in zip(ordered, ordered[1:]):
+        linf_a = float(a["linf"])
+        linf_b = float(b["linf"])
+        nodes_a = float(a["total_nodes"])
+        nodes_b = float(b["total_nodes"])
+
+        time_a = a.get("steady_state_ns_per_eval", "")
+        time_b = b.get("steady_state_ns_per_eval", "")
+        time_growth = ""
+        if time_a != "" and time_b != "":
+            time_growth = float(time_b) / float(time_a)
+
+        incremental.append({
+            "budget_from": int(a["budget"]),
+            "budget_to": int(b["budget"]),
+            "linf_improvement": linf_a / linf_b,
+            "dag_growth": nodes_b / nodes_a,
+            "execution_time_growth": time_growth,
+        })
+
+    representation = {
+        "simplices_vs_budget_exponent": fit_map["simplices_vs_budget"],
+        "min_nodes_vs_budget_exponent": fit_map["min_nodes_vs_budget"],
+        "total_nodes_vs_budget_exponent": fit_map["total_nodes_vs_budget"],
+        "total_nodes_vs_simplices_exponent": fit_map["total_nodes_vs_simplices"],
+        "steady_state_time_vs_total_nodes_exponent":
+            fit_map["steady_state_time_vs_total_nodes"],
+        "measured_budget_count": len(dags),
+    }
+
+    accuracy = {
+        "linf_vs_budget_exponent": fit_map["linf_vs_budget"],
+        "linf_vs_simplices_exponent": fit_map["linf_vs_simplices"],
+        "total_nodes_vs_linf_exponent": fit_map["total_nodes_vs_linf"],
+        "min_nodes_vs_linf_exponent": fit_map["min_nodes_vs_linf"],
+        "steady_state_time_vs_linf_exponent":
+            fit_map["steady_state_time_vs_linf"],
+        "measured_budget_count": len(dags),
+    }
+
+    return rows, representation, accuracy, incremental
+
+
+def parse_deferred_cells(specs: list[str]) -> set[tuple[int, int]]:
+    cells = set()
+    for spec in specs:
+        budget, batch = spec.split(":", 1)
+        cells.add((int(budget), int(batch)))
+    return cells
+
+
+def classify_failure(evidence: str) -> tuple[str, str, str]:
+    """Classify a failed calibration artifact without hiding the raw failure."""
+    if not evidence:
+        return "failed", "", ""
+
+    path = ROOT / evidence
+    if not path.exists():
+        return "failed", "", ""
+
+    try:
+        d = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return "failed", "", ""
+
+    if d.get("all_failures_resource_related") is True:
+        failures = d.get("policy_failures", {})
+        messages = " ".join(str(v) for v in failures.values()).lower()
+
+        kind = "resource"
+        if "out of memory" in messages or "resource_exhausted" in messages:
+            kind = "gpu_memory"
+
+        return (
+            "resource_failure",
+            kind,
+            f"{d.get('backend', '')}:{d.get('device', '')}".strip(":"),
+        )
+
+    return "failed", "non_resource_or_mixed", ""
+
+
+def feasibility(
+    completeness: list[dict[str, str]],
+    deferred_cells: set[tuple[int, int]],
+) -> list[dict]:
+    out = []
+    for r in completeness:
+        budget = int(r["budget"])
+        batch = int(r["batch_size"])
+        raw_status = r["status"]
+        evidence = r.get("evidence", "")
+
+        status = raw_status
+        failure_kind = ""
+        hardware = ""
+
+        if raw_status == "failed":
+            status, failure_kind, hardware = classify_failure(evidence)
+        elif raw_status == "pending" and (budget, batch) in deferred_cells:
+            status = "deferred"
+
+        out.append({
+            "budget": budget,
+            "batch_size": batch,
+            "raw_status": raw_status,
+            "status": status,
+            "failure_kind": failure_kind,
+            "hardware": hardware,
+            "evidence": evidence,
+        })
+    return out
+
+
+def conclusion_analysis(
+    cross: list[dict],
+    costs: list[dict],
+    dom: list[dict],
+    dags: list[dict],
+    feas: list[dict],
+    representation: dict,
+    accuracy: dict,
+) -> dict:
+    """Generate machine-readable conclusions supported by measured evidence."""
+    surrogate_global = sum(
+        str(r["global_pareto"]).lower() == "true" for r in costs
+    )
+    dominated = sum(
+        bool(r["best_exact_dominates_surrogate"]) for r in dom
+    )
+
+    surrogate_advantage = any(
+        bool(r["surrogate_dominates_best_exact"]) for r in dom
+    )
+
+    transitions = []
+    previous = None
+    for r in sorted(cross, key=lambda x: x["batch_size"]):
+        method = r["preferred_exact_method"]
+        if method != previous:
+            transitions.append({
+                "batch_size": r["batch_size"],
+                "preferred_exact_method": method,
+            })
+            previous = method
+
+    status_counts = Counter(r["status"] for r in feas)
+    resource_failures = [
+        {
+            "budget": r["budget"],
+            "batch_size": r["batch_size"],
+            "failure_kind": r["failure_kind"],
+            "hardware": r["hardware"],
+            "evidence": r["evidence"],
+        }
+        for r in feas
+        if r["status"] == "resource_failure"
+    ]
+
+    unclassified_pending = status_counts.get("pending", 0)
+    measurement_sufficient = (
+        len(dom) > 0
+        and dominated == len(dom)
+        and surrogate_global == 0
+        and unclassified_pending == 0
+    )
+
+    return {
+        "surrogate_computational_advantage_observed": surrogate_advantage,
+        "surrogate_global_pareto_points": surrogate_global,
+        "measured_surrogate_points_dominated_by_best_exact_same_batch": dominated,
+        "dominance_comparisons": len(dom),
+        "all_measured_surrogate_points_dominated_same_batch":
+            bool(dom) and dominated == len(dom),
+        "exact_method_transitions": transitions,
+        "resource_boundary_observed": bool(resource_failures),
+        "resource_failures": resource_failures,
+        "representation_scaling": representation,
+        "accuracy_cost_scaling": accuracy,
+        "measurement_sufficiency": {
+            "sufficient_for_current_v1_conclusion": measurement_sufficient,
+            "unclassified_pending_cells": unclassified_pending,
+            "deferred_cells": status_counts.get("deferred", 0),
+            "additional_measurements_required_for_current_conclusion":
+                not measurement_sufficient,
+            "criterion":
+                "All measured surrogate points are dominated by the best exact "
+                "method at the same batch, no surrogate is globally Pareto-optimal, "
+                "and no unclassified pending cells remain.",
+        },
+        "interpretation_scope":
+            "Empirical conclusions apply to the measured ThermoGPU methane-Z "
+            "case, tested surrogate construction, execution policies, hardware, "
+            "budgets, batches, and accuracy range; fitted exponents are measured "
+            "scaling trends, not asymptotic complexity theorems.",
+    }
 
 
 def main() -> None:
@@ -199,7 +459,27 @@ def main() -> None:
     p.add_argument("--completeness", type=Path, default=PROCESSED / "experiment-completeness.csv")
     p.add_argument("--performance-root", type=Path, default=RAW / "surrogate-performance")
     p.add_argument("--output-dir", type=Path, default=PROCESSED)
+    p.add_argument(
+        "--deferred-cell",
+        action="append",
+        default=None,
+        metavar="BUDGET:BATCH",
+        help="Classify a pending experiment cell as deliberately deferred.",
+    )
     a = p.parse_args()
+
+    deferred_specs = a.deferred_cell
+    if deferred_specs is None:
+        # ThermoGPU V1 measurement decision: these cells are deliberately
+        # deferred because existing evidence is sufficient for the V1
+        # dominance conclusion. Future case studies should pass their own
+        # --deferred-cell values explicitly.
+        deferred_specs = [
+            "256:10000",
+            "256:100000",
+            "256:1000000",
+        ]
+    deferred_cells = parse_deferred_cells(deferred_specs)
 
     direct = read_csv(a.direct)
     accuracy = read_csv(a.accuracy)
@@ -210,19 +490,37 @@ def main() -> None:
     costs = accuracy_cost(master)
     dom = dominance(master)
     dags = dag_scaling(accuracy, a.performance_root)
-    feas = feasibility(complete)
+    scaling_rows, representation, accuracy_scaling, incremental = (
+        scaling_analysis(dags)
+    )
+    feas = feasibility(complete, deferred_cells)
 
     write_csv(a.output_dir / "exact-crossover.csv", cross, list(cross[0]))
     write_csv(a.output_dir / "surrogate-accuracy-cost.csv", costs, list(costs[0]))
     write_csv(a.output_dir / "dominance-analysis.csv", dom, list(dom[0]))
     write_csv(a.output_dir / "dag-scaling.csv", dags, list(dags[0]))
+    write_csv(
+        a.output_dir / "scaling-analysis.csv",
+        scaling_rows,
+        list(scaling_rows[0]),
+    )
     write_csv(a.output_dir / "feasibility-analysis.csv", feas, list(feas[0]))
 
     status_counts = Counter(r["status"] for r in feas)
     global_surrogate = sum(str(r["global_pareto"]).lower() == "true" for r in costs)
     dominated = sum(bool(r["best_exact_dominates_surrogate"]) for r in dom)
+    conclusions = conclusion_analysis(
+        cross,
+        costs,
+        dom,
+        dags,
+        feas,
+        representation,
+        accuracy_scaling,
+    )
+
     summary = {
-        "schema_version": 1,
+        "schema_version": 2,
         "study": a.study_name,
         "analysis": {
             "exact_crossover": cross,
@@ -231,9 +529,13 @@ def main() -> None:
             "surrogate_points_dominated_by_best_exact_same_batch": dominated,
             "dominance_comparisons": len(dom),
             "dag_scaling": dags,
+            "representation_scaling": representation,
+            "accuracy_scaling": accuracy_scaling,
+            "incremental_tradeoffs": incremental,
             "measurement_status": dict(sorted(status_counts.items())),
             "measurement_total": len(feas),
         },
+        "conclusions": conclusions,
     }
     summary_path = a.output_dir / "study-summary.json"
     summary_path.write_text(json.dumps(summary, indent=2) + "\n")

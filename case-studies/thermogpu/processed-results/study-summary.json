@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "study": "thermogpu-methane-z-v1",
   "analysis": {
     "exact_crossover": [
@@ -190,11 +190,112 @@
         "steady_state_ns_per_eval": 8550.571044906974
       }
     ],
+    "representation_scaling": {
+      "simplices_vs_budget_exponent": 1.04025453952233,
+      "min_nodes_vs_budget_exponent": 2.102641340018446,
+      "total_nodes_vs_budget_exponent": 1.965699458761194,
+      "total_nodes_vs_simplices_exponent": 1.8888846123784893,
+      "steady_state_time_vs_total_nodes_exponent": 0.6740582443243848,
+      "measured_budget_count": 5
+    },
+    "accuracy_scaling": {
+      "linf_vs_budget_exponent": -1.5296392070490175,
+      "linf_vs_simplices_exponent": -1.466693051694605,
+      "total_nodes_vs_linf_exponent": -1.2207047869485295,
+      "min_nodes_vs_linf_exponent": -1.3146882115107006,
+      "steady_state_time_vs_linf_exponent": -0.8244921755225483,
+      "measured_budget_count": 5
+    },
+    "incremental_tradeoffs": [
+      {
+        "budget_from": 16,
+        "budget_to": 32,
+        "linf_improvement": 7.196909398050573,
+        "dag_growth": 4.574257425742574,
+        "execution_time_growth": 3.487866848519006
+      },
+      {
+        "budget_from": 32,
+        "budget_to": 64,
+        "linf_improvement": 2.852914462834811,
+        "dag_growth": 3.9523809523809526,
+        "execution_time_growth": 2.013279960048769
+      },
+      {
+        "budget_from": 64,
+        "budget_to": 128,
+        "linf_improvement": 2.04490489465185,
+        "dag_growth": 3.495618838992333,
+        "execution_time_growth": 2.0785636670903225
+      },
+      {
+        "budget_from": 128,
+        "budget_to": 256,
+        "linf_improvement": 1.9780970089482781,
+        "dag_growth": 3.870593764687451,
+        "execution_time_growth": 3.29020857069571
+      }
+    ],
     "measurement_status": {
       "complete": 31,
-      "failed": 1,
-      "pending": 3
+      "deferred": 3,
+      "resource_failure": 1
     },
     "measurement_total": 35
+  },
+  "conclusions": {
+    "surrogate_computational_advantage_observed": false,
+    "surrogate_global_pareto_points": 0,
+    "measured_surrogate_points_dominated_by_best_exact_same_batch": 31,
+    "dominance_comparisons": 31,
+    "all_measured_surrogate_points_dominated_same_batch": true,
+    "exact_method_transitions": [
+      {
+        "batch_size": 1,
+        "preferred_exact_method": "CPU scalar"
+      },
+      {
+        "batch_size": 100,
+        "preferred_exact_method": "CPU OpenMP"
+      },
+      {
+        "batch_size": 1000,
+        "preferred_exact_method": "GPU direct resident"
+      }
+    ],
+    "resource_boundary_observed": true,
+    "resource_failures": [
+      {
+        "budget": 128,
+        "batch_size": 1000000,
+        "failure_kind": "gpu_memory",
+        "hardware": "gpu:cuda:0",
+        "evidence": "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b1000000.failed.json"
+      }
+    ],
+    "representation_scaling": {
+      "simplices_vs_budget_exponent": 1.04025453952233,
+      "min_nodes_vs_budget_exponent": 2.102641340018446,
+      "total_nodes_vs_budget_exponent": 1.965699458761194,
+      "total_nodes_vs_simplices_exponent": 1.8888846123784893,
+      "steady_state_time_vs_total_nodes_exponent": 0.6740582443243848,
+      "measured_budget_count": 5
+    },
+    "accuracy_cost_scaling": {
+      "linf_vs_budget_exponent": -1.5296392070490175,
+      "linf_vs_simplices_exponent": -1.466693051694605,
+      "total_nodes_vs_linf_exponent": -1.2207047869485295,
+      "min_nodes_vs_linf_exponent": -1.3146882115107006,
+      "steady_state_time_vs_linf_exponent": -0.8244921755225483,
+      "measured_budget_count": 5
+    },
+    "measurement_sufficiency": {
+      "sufficient_for_current_v1_conclusion": true,
+      "unclassified_pending_cells": 0,
+      "deferred_cells": 3,
+      "additional_measurements_required_for_current_conclusion": false,
+      "criterion": "All measured surrogate points are dominated by the best exact method at the same batch, no surrogate is globally Pareto-optimal, and no unclassified pending cells remain."
+    },
+    "interpretation_scope": "Empirical conclusions apply to the measured ThermoGPU methane-Z case, tested surrogate construction, execution policies, hardware, budgets, batches, and accuracy range; fitted exponents are measured scaling trends, not asymptotic complexity theorems."
   }
 }
