@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b128-float32-n10",
+    "dtype": "float32",
+    "batch_size": 10,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 55969.00591626763,
+      "compact-lookahead-k64": 57841.60457551479,
+      "compact-min-live": 58327.894657850266,
+      "grouped-lookahead-k32": 450087.69957348704,
+      "grouped-lookahead-k64": 300260.69143787026,
+      "grouped-min-live": 1460144.9016481638
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 128,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/artifacts/methane-z-b128-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "compact-lookahead-k32",
+  "selected_ns_per_eval": 55969.00591626763,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.43773036904167384,
+      "compile_first_execution_seconds": 4.655055386945605,
+      "median_execution_seconds": 0.0005832789465785027,
+      "ns_per_eval": 58327.894657850266
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.5984539879718795,
+      "compile_first_execution_seconds": 516.4977696730057,
+      "median_execution_seconds": 0.014601449016481638,
+      "ns_per_eval": 1460144.9016481638
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 1.2746507050469518,
+      "compile_first_execution_seconds": 6.955357805942185,
+      "median_execution_seconds": 0.0005596900591626763,
+      "ns_per_eval": 55969.00591626763
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 1.4295249400893226,
+      "compile_first_execution_seconds": 641.047591448063,
+      "median_execution_seconds": 0.0045008769957348704,
+      "ns_per_eval": 450087.69957348704
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 1.6157792379381135,
+      "compile_first_execution_seconds": 7.226798871997744,
+      "median_execution_seconds": 0.0005784160457551479,
+      "ns_per_eval": 57841.60457551479
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 1.7670571999624372,
+      "compile_first_execution_seconds": 151.4321336329449,
+      "median_execution_seconds": 0.0030026069143787026,
+      "ns_per_eval": 300260.69143787026
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0006099460879340768,
+      0.0005617110291495919,
+      0.0005810459842905402,
+      0.0005288519896566868,
+      0.0006280069937929511,
+      0.0005832789465785027,
+      0.0006039479048922658
+    ],
+    "grouped-min-live": [
+      0.014613983919844031,
+      0.01495022897142917,
+      0.014601449016481638,
+      0.014036477077752352,
+      0.014614834915846586,
+      0.01425942697096616,
+      0.014293576939962804
+    ],
+    "compact-lookahead-k32": [
+      0.0007246569730341434,
+      0.0005596900591626763,
+      0.0005498090758919716,
+      0.00061182607896626,
+      0.0004841340705752373,
+      0.0005570949288085103,
+      0.0005597760900855064
+    ],
+    "grouped-lookahead-k32": [
+      0.004752818960696459,
+      0.0044221519492566586,
+      0.004544281051494181,
+      0.0045008769957348704,
+      0.004498476977460086,
+      0.00447026698384434,
+      0.00458840501960367
+    ],
+    "compact-lookahead-k64": [
+      0.000622329069301486,
+      0.0004921189974993467,
+      0.0006860590074211359,
+      0.0005784160457551479,
+      0.0005581490695476532,
+      0.0006115710129961371,
+      0.0005533809307962656
+    ],
+    "grouped-lookahead-k64": [
+      0.0032317269360646605,
+      0.002917633973993361,
+      0.0030752680031582713,
+      0.003039079951122403,
+      0.0029427390545606613,
+      0.002996379043906927,
+      0.0030026069143787026
+    ]
+  }
+}

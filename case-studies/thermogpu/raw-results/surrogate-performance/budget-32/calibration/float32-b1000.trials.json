@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b32-float32-n1000",
+    "dtype": "float32",
+    "batch_size": 1000,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 646.824948489666,
+      "compact-lookahead-k64": 710.0299699231982,
+      "compact-min-live": 621.0179999470711,
+      "grouped-lookahead-k32": 1072.264974936843,
+      "grouped-lookahead-k64": 769.795966334641,
+      "grouped-min-live": 728.1569996848702
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 32,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/artifacts/methane-z-b32-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "compact-min-live",
+  "selected_ns_per_eval": 621.0179999470711,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.048878215020522475,
+      "compile_first_execution_seconds": 10.32975204498507,
+      "median_execution_seconds": 0.0006210179999470711,
+      "ns_per_eval": 621.0179999470711
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.03923688305076212,
+      "compile_first_execution_seconds": 56.92619655805174,
+      "median_execution_seconds": 0.0007281569996848702,
+      "ns_per_eval": 728.1569996848702
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.05308063398115337,
+      "compile_first_execution_seconds": 9.966814065002836,
+      "median_execution_seconds": 0.000646824948489666,
+      "ns_per_eval": 646.824948489666
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.060453219106420875,
+      "compile_first_execution_seconds": 98.37136833299883,
+      "median_execution_seconds": 0.001072264974936843,
+      "ns_per_eval": 1072.264974936843
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.06146112410351634,
+      "compile_first_execution_seconds": 10.221210515941493,
+      "median_execution_seconds": 0.0007100299699231982,
+      "ns_per_eval": 710.0299699231982
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.06000901106745005,
+      "compile_first_execution_seconds": 131.0333003429696,
+      "median_execution_seconds": 0.000769795966334641,
+      "ns_per_eval": 769.795966334641
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0007376990979537368,
+      0.00063140201382339,
+      0.000625311047770083,
+      0.0006030219374224544,
+      0.0005835749907419086,
+      0.0006210179999470711,
+      0.0006163549842312932
+    ],
+    "grouped-min-live": [
+      0.0007075970061123371,
+      0.0007190490141510963,
+      0.0007290269713848829,
+      0.0007281569996848702,
+      0.0007022960344329476,
+      0.0008197339484468102,
+      0.0007746400078758597
+    ],
+    "compact-lookahead-k32": [
+      0.0007229159818962216,
+      0.0007318870630115271,
+      0.000646824948489666,
+      0.0007651069900020957,
+      0.0006369809852913022,
+      0.0006019350839778781,
+      0.0006448300555348396
+    ],
+    "grouped-lookahead-k32": [
+      0.0011235380079597235,
+      0.0011949529871344566,
+      0.001072264974936843,
+      0.0010866340016946197,
+      0.0010049889096990228,
+      0.0009833119111135602,
+      0.000978793017566204
+    ],
+    "compact-lookahead-k64": [
+      0.0007094090105965734,
+      0.0008093590149655938,
+      0.0006358720129355788,
+      0.000717761111445725,
+      0.0007039040792733431,
+      0.0007126630516722798,
+      0.0007100299699231982
+    ],
+    "grouped-lookahead-k64": [
+      0.0007735099643468857,
+      0.000764267984777689,
+      0.0007853689603507519,
+      0.0008253789274021983,
+      0.000769795966334641,
+      0.0007623720448464155,
+      0.0007267200853675604
+    ]
+  }
+}

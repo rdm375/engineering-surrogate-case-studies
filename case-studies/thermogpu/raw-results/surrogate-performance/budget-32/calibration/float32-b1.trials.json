@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b32-float32-n1",
+    "dtype": "float32",
+    "batch_size": 1,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 325590.0228396058,
+      "compact-lookahead-k64": 333559.9321871996,
+      "compact-min-live": 235197.94922322035,
+      "grouped-lookahead-k32": 185123.0626925826,
+      "grouped-lookahead-k64": 282966.997474432,
+      "grouped-min-live": 270838.03433924913
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 32,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/artifacts/methane-z-b32-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "grouped-lookahead-k32",
+  "selected_ns_per_eval": 185123.0626925826,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.1420884489780292,
+      "compile_first_execution_seconds": 0.49283248698338866,
+      "median_execution_seconds": 0.00023519794922322035,
+      "ns_per_eval": 235197.94922322035
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.06503842305392027,
+      "compile_first_execution_seconds": 1.9533545390004292,
+      "median_execution_seconds": 0.00027083803433924913,
+      "ns_per_eval": 270838.03433924913
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.05626235401723534,
+      "compile_first_execution_seconds": 0.502696163021028,
+      "median_execution_seconds": 0.0003255900228396058,
+      "ns_per_eval": 325590.0228396058
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.07689237303566188,
+      "compile_first_execution_seconds": 1.7415750499349087,
+      "median_execution_seconds": 0.0001851230626925826,
+      "ns_per_eval": 185123.0626925826
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.059918835991993546,
+      "compile_first_execution_seconds": 0.46657532604876906,
+      "median_execution_seconds": 0.0003335599321871996,
+      "ns_per_eval": 333559.9321871996
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.059211396030150354,
+      "compile_first_execution_seconds": 1.6433335399487987,
+      "median_execution_seconds": 0.000282966997474432,
+      "ns_per_eval": 282966.997474432
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0002463608980178833,
+      0.000223863054998219,
+      0.0002721220953390002,
+      0.0002611300442367792,
+      0.0002340329810976982,
+      0.00022605399135500193,
+      0.00023519794922322035
+    ],
+    "grouped-min-live": [
+      0.00022087001707404852,
+      0.000256291008554399,
+      0.00024927896447479725,
+      0.00027083803433924913,
+      0.0002789730206131935,
+      0.0005061289994046092,
+      0.0003025720361620188
+    ],
+    "compact-lookahead-k32": [
+      0.0003255900228396058,
+      0.00030996801797300577,
+      0.0002949730260297656,
+      0.00041994499042630196,
+      0.0003502960316836834,
+      0.000279798055998981,
+      0.0003332210471853614
+    ],
+    "grouped-lookahead-k32": [
+      0.00024581002071499825,
+      0.0001890410203486681,
+      0.00018331105820834637,
+      0.0001851230626925826,
+      0.00018338894005864859,
+      0.00018298998475074768,
+      0.00032534508500248194
+    ],
+    "compact-lookahead-k64": [
+      0.0003370349295437336,
+      0.0003381159622222185,
+      0.0003216300392523408,
+      0.00033277797047048807,
+      0.0003335599321871996,
+      0.000580164953134954,
+      0.00021513993851840496
+    ],
+    "grouped-lookahead-k64": [
+      0.0003601940115913749,
+      0.000282966997474432,
+      0.0003372600767761469,
+      0.00032479700166732073,
+      0.00027944392058998346,
+      0.00021387299057096243,
+      0.00021166994702070951
+    ]
+  }
+}

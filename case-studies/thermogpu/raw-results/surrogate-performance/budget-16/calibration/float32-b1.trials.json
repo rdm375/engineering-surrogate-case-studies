@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b16-float32-n1",
+    "dtype": "float32",
+    "batch_size": 1,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 217242.04998463392,
+      "compact-lookahead-k64": 218719.01117265224,
+      "compact-min-live": 216585.0019082427,
+      "grouped-lookahead-k32": 206465.01798182726,
+      "grouped-lookahead-k64": 206873.98500740528,
+      "grouped-min-live": 139915.96642881632
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 16,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/artifacts/methane-z-b16-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "grouped-min-live",
+  "selected_ns_per_eval": 139915.96642881632,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.2963350201025605,
+      "compile_first_execution_seconds": 0.38904558797366917,
+      "median_execution_seconds": 0.0002165850019082427,
+      "ns_per_eval": 216585.0019082427
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.040824517025612295,
+      "compile_first_execution_seconds": 0.35642566008027643,
+      "median_execution_seconds": 0.00013991596642881632,
+      "ns_per_eval": 139915.96642881632
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.03157898399513215,
+      "compile_first_execution_seconds": 0.3560630410211161,
+      "median_execution_seconds": 0.00021724204998463392,
+      "ns_per_eval": 217242.04998463392
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.02200284891296178,
+      "compile_first_execution_seconds": 0.26936757401563227,
+      "median_execution_seconds": 0.00020646501798182726,
+      "ns_per_eval": 206465.01798182726
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.027833046042360365,
+      "compile_first_execution_seconds": 0.39734959800262004,
+      "median_execution_seconds": 0.00021871901117265224,
+      "ns_per_eval": 218719.01117265224
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.021404537954367697,
+      "compile_first_execution_seconds": 0.26165944896638393,
+      "median_execution_seconds": 0.00020687398500740528,
+      "ns_per_eval": 206873.98500740528
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.00037542195059359074,
+      0.00022929301485419273,
+      0.00024943798780441284,
+      0.0002165850019082427,
+      0.00019911094568669796,
+      0.00019137805793434381,
+      0.0001900839852169156
+    ],
+    "grouped-min-live": [
+      0.00014286604709923267,
+      0.0001321330200880766,
+      0.00017359491903334856,
+      0.00013991596642881632,
+      0.00013533001765608788,
+      0.00011916598305106163,
+      0.00019006198272109032
+    ],
+    "compact-lookahead-k32": [
+      0.00016768998466432095,
+      0.00022884889040142298,
+      0.00024275400210171938,
+      0.00019934598822146654,
+      0.00021724204998463392,
+      0.00016509101260453463,
+      0.00021814298816025257
+    ],
+    "grouped-lookahead-k32": [
+      0.0001633849460631609,
+      0.00020646501798182726,
+      0.00022659404203295708,
+      0.0001900269417092204,
+      0.0001391059486195445,
+      0.0002170400694012642,
+      0.00024808000307530165
+    ],
+    "compact-lookahead-k64": [
+      0.00021871901117265224,
+      0.00021923996973782778,
+      0.00019457994494587183,
+      0.0002440109383314848,
+      0.00021890504285693169,
+      0.00020552403293550014,
+      0.0001916619949042797
+    ],
+    "grouped-lookahead-k64": [
+      0.00020371400751173496,
+      0.0002968899207189679,
+      0.00018615799490362406,
+      0.00020687398500740528,
+      0.0001643509604036808,
+      0.0002121669240295887,
+      0.00021725508850067854
+    ]
+  }
+}

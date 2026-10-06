@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b32-float32-n1000000",
+    "dtype": "float32",
+    "batch_size": 1000000,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 181.39454501215369,
+      "compact-lookahead-k64": 179.3828330701217,
+      "compact-min-live": 181.88384303357452,
+      "grouped-lookahead-k32": 152.36136491876096,
+      "grouped-lookahead-k64": 147.54889404866844,
+      "grouped-min-live": 143.3647929225117
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 32,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/artifacts/methane-z-b32-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "grouped-min-live",
+  "selected_ns_per_eval": 143.3647929225117,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.041439851047471166,
+      "compile_first_execution_seconds": 101.06705940701067,
+      "median_execution_seconds": 0.18188384303357452,
+      "ns_per_eval": 181.88384303357452
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.044347472954541445,
+      "compile_first_execution_seconds": 52.12451196904294,
+      "median_execution_seconds": 0.1433647929225117,
+      "ns_per_eval": 143.3647929225117
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.05384957999922335,
+      "compile_first_execution_seconds": 100.68880199501291,
+      "median_execution_seconds": 0.18139454501215369,
+      "ns_per_eval": 181.39454501215369
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.06483259401284158,
+      "compile_first_execution_seconds": 84.47171748406254,
+      "median_execution_seconds": 0.15236136491876096,
+      "ns_per_eval": 152.36136491876096
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.056135014980100095,
+      "compile_first_execution_seconds": 100.3725275490433,
+      "median_execution_seconds": 0.1793828330701217,
+      "ns_per_eval": 179.3828330701217
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.05796700296923518,
+      "compile_first_execution_seconds": 97.22209873201791,
+      "median_execution_seconds": 0.14754889404866844,
+      "ns_per_eval": 147.54889404866844
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.18188384303357452,
+      0.1817202860256657,
+      0.18131993699353188,
+      0.18207120499573648,
+      0.18234290601685643,
+      0.18162993399892002,
+      0.18201460095588118
+    ],
+    "grouped-min-live": [
+      0.14522369706537575,
+      0.14364955702330917,
+      0.1434030010132119,
+      0.1433647929225117,
+      0.14315772196277976,
+      0.14323461195454001,
+      0.14330110303126276
+    ],
+    "compact-lookahead-k32": [
+      0.18190653098281473,
+      0.18157216103281826,
+      0.18139454501215369,
+      0.181128524011001,
+      0.18106857792008668,
+      0.1814672719920054,
+      0.18115084304008633
+    ],
+    "grouped-lookahead-k32": [
+      0.1523430689703673,
+      0.15277269599027932,
+      0.15236136491876096,
+      0.15255290793720633,
+      0.1526287089800462,
+      0.15203247894532979,
+      0.15229650808032602
+    ],
+    "compact-lookahead-k64": [
+      0.17952519503887743,
+      0.17930707603227347,
+      0.17931687005329877,
+      0.17945187399163842,
+      0.17953316099010408,
+      0.17907990398816764,
+      0.1793828330701217
+    ],
+    "grouped-lookahead-k64": [
+      0.14935391303151846,
+      0.1480848400387913,
+      0.14706757199019194,
+      0.14778756198938936,
+      0.14754889404866844,
+      0.14737884898204356,
+      0.14748026593588293
+    ]
+  }
+}

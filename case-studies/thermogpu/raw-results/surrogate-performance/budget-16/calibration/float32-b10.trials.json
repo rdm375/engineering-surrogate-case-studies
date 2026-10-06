@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b16-float32-n10",
+    "dtype": "float32",
+    "batch_size": 10,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 28471.392579376698,
+      "compact-lookahead-k64": 24465.902242809534,
+      "compact-min-live": 25976.20477899909,
+      "grouped-lookahead-k32": 24517.80019327998,
+      "grouped-lookahead-k64": 21513.307001441717,
+      "grouped-min-live": 21781.50461986661
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 16,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/artifacts/methane-z-b16-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "grouped-lookahead-k64",
+  "selected_ns_per_eval": 21513.307001441717,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.019943371997214854,
+      "compile_first_execution_seconds": 2.21394336305093,
+      "median_execution_seconds": 0.0002597620477899909,
+      "ns_per_eval": 25976.20477899909
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.016104868962429464,
+      "compile_first_execution_seconds": 4.691403478034772,
+      "median_execution_seconds": 0.0002178150461986661,
+      "ns_per_eval": 21781.50461986661
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.025363922002725303,
+      "compile_first_execution_seconds": 2.1878477410646155,
+      "median_execution_seconds": 0.000284713925793767,
+      "ns_per_eval": 28471.392579376698
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.02723202097695321,
+      "compile_first_execution_seconds": 4.26523666200228,
+      "median_execution_seconds": 0.0002451780019327998,
+      "ns_per_eval": 24517.80019327998
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.021413701004348695,
+      "compile_first_execution_seconds": 2.036253160913475,
+      "median_execution_seconds": 0.00024465902242809534,
+      "ns_per_eval": 24465.902242809534
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.018161070998758078,
+      "compile_first_execution_seconds": 4.082071794080548,
+      "median_execution_seconds": 0.00021513307001441717,
+      "ns_per_eval": 21513.307001441717
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.00032451306469738483,
+      0.00030921795405447483,
+      0.0002649209927767515,
+      0.0002597620477899909,
+      0.000250271987169981,
+      0.00024937395937740803,
+      0.0002448459854349494
+    ],
+    "grouped-min-live": [
+      0.0002225710777565837,
+      0.0001801470061764121,
+      0.0002178150461986661,
+      0.00018791994079947472,
+      0.0002677548909559846,
+      0.00018505495972931385,
+      0.00023989204782992601
+    ],
+    "compact-lookahead-k32": [
+      0.000284713925793767,
+      0.0005692600971087813,
+      0.0003109920071437955,
+      0.000250393059104681,
+      0.00031953095458447933,
+      0.0002709140535444021,
+      0.0002558020642027259
+    ],
+    "grouped-lookahead-k32": [
+      0.0002843539696186781,
+      0.00028845202177762985,
+      0.00027917593251913786,
+      0.0002451780019327998,
+      0.00019381905440241098,
+      0.00017949298489838839,
+      0.00018145900685340166
+    ],
+    "compact-lookahead-k64": [
+      0.0002717329189181328,
+      0.000229467055760324,
+      0.0003013170789927244,
+      0.00024465902242809534,
+      0.00020315696019679308,
+      0.00019714306108653545,
+      0.00033448601607233286
+    ],
+    "grouped-lookahead-k64": [
+      0.00026723905466496944,
+      0.00021513307001441717,
+      0.00021245400421321392,
+      0.00016848789528012276,
+      0.00016391405370086432,
+      0.0002604470355436206,
+      0.0002443420235067606
+    ]
+  }
+}

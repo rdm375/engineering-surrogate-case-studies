@@ -1,0 +1,33 @@
+{
+  "schema_version": 2,
+  "profile_kind": "native-dag-execution",
+  "name": "thermogpu-b64-float32-n1000000",
+  "dtype": "float32",
+  "batch_size": 1000000,
+  "backend": "gpu",
+  "device": "cuda:0",
+  "policy_costs": {
+    "compact-lookahead-k32": 768.00431299489,
+    "compact-lookahead-k64": 759.228880982846,
+    "compact-min-live": 761.7132000159472
+  },
+  "policy_failures": {
+    "grouped-lookahead-k32": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 4.39GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error=''] [executable_name='jit_evaluate']",
+    "grouped-lookahead-k64": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 5.41GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error=''] [executable_name='jit_evaluate']",
+    "grouped-min-live": "JaxRuntimeError: RESOURCE_EXHAUSTED: Out of memory while trying to allocate 3.81GiB with allocator GPU_0_bfc on device 0. [tf-allocator-allocation-error=''] [executable_name='jit_evaluate']"
+  },
+  "metadata": {
+    "budget": 64,
+    "repeats": 7,
+    "warmup": 2,
+    "seed": 20261004,
+    "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/artifacts/methane-z-b64-native.cpwa",
+    "jax_version": "0.11.2",
+    "jax_backend": "gpu",
+    "jax_device": "cuda:0",
+    "jax_devices": [
+      "cuda:0"
+    ],
+    "canonical_gpu_run": true
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b16-float32-n100000",
+    "dtype": "float32",
+    "batch_size": 100000,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 32.75111084803939,
+      "compact-lookahead-k64": 32.574370270594954,
+      "compact-min-live": 32.59390010498464,
+      "grouped-lookahead-k32": 27.65138982795179,
+      "grouped-lookahead-k64": 27.18282979913056,
+      "grouped-min-live": 29.403009684756398
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 16,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/artifacts/methane-z-b16-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "grouped-lookahead-k64",
+  "selected_ns_per_eval": 27.18282979913056,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.022353877080604434,
+      "compile_first_execution_seconds": 21.296642126049846,
+      "median_execution_seconds": 0.003259390010498464,
+      "ns_per_eval": 32.59390010498464
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.017098171985708177,
+      "compile_first_execution_seconds": 15.105497736949474,
+      "median_execution_seconds": 0.00294030096847564,
+      "ns_per_eval": 29.403009684756398
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.023309140000492334,
+      "compile_first_execution_seconds": 20.939469322096556,
+      "median_execution_seconds": 0.003275111084803939,
+      "ns_per_eval": 32.75111084803939
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.02033162792213261,
+      "compile_first_execution_seconds": 15.548553566099145,
+      "median_execution_seconds": 0.002765138982795179,
+      "ns_per_eval": 27.65138982795179
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.02419506898149848,
+      "compile_first_execution_seconds": 20.94770595501177,
+      "median_execution_seconds": 0.0032574370270594954,
+      "ns_per_eval": 32.574370270594954
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.019340089987963438,
+      "compile_first_execution_seconds": 15.427914239931852,
+      "median_execution_seconds": 0.002718282979913056,
+      "ns_per_eval": 27.18282979913056
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.003357326961122453,
+      0.003259390010498464,
+      0.0032769659301266074,
+      0.0032537260558456182,
+      0.0032566430745646358,
+      0.003231251030229032,
+      0.0033487200271338224
+    ],
+    "grouped-min-live": [
+      0.002975165960378945,
+      0.00294030096847564,
+      0.002927913097664714,
+      0.002961976919323206,
+      0.0029618649277836084,
+      0.0029371699783951044,
+      0.0029281890019774437
+    ],
+    "compact-lookahead-k32": [
+      0.0032796210143715143,
+      0.0033418729435652494,
+      0.003275111084803939,
+      0.003243900020606816,
+      0.0033055710373446345,
+      0.0032221140572801232,
+      0.0032108689192682505
+    ],
+    "grouped-lookahead-k32": [
+      0.0028123758966103196,
+      0.002812198013998568,
+      0.002771856030449271,
+      0.002765138982795179,
+      0.002744388999417424,
+      0.0027554499683901668,
+      0.002745578996837139
+    ],
+    "compact-lookahead-k64": [
+      0.003353667911142111,
+      0.0032548430608585477,
+      0.0033380340319126844,
+      0.003248151042498648,
+      0.0032574370270594954,
+      0.00322677509393543,
+      0.0033571379026398063
+    ],
+    "grouped-lookahead-k64": [
+      0.0028128920821473002,
+      0.002701362012885511,
+      0.00268888205755502,
+      0.0027439569821581244,
+      0.002718282979913056,
+      0.0026945770950987935,
+      0.0027399370446801186
+    ]
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b16-float32-n10000",
+    "dtype": "float32",
+    "batch_size": 10000,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 64.7755921818316,
+      "compact-lookahead-k64": 61.966199427843094,
+      "compact-min-live": 62.953203450888395,
+      "grouped-lookahead-k32": 52.506395149976015,
+      "grouped-lookahead-k64": 55.76940020546317,
+      "grouped-min-live": 50.20529497414827
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 16,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/artifacts/methane-z-b16-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "grouped-min-live",
+  "selected_ns_per_eval": 50.20529497414827,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.02170554199256003,
+      "compile_first_execution_seconds": 4.260264856973663,
+      "median_execution_seconds": 0.000629532034508884,
+      "ns_per_eval": 62.953203450888395
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.01753683597780764,
+      "compile_first_execution_seconds": 4.116672314004973,
+      "median_execution_seconds": 0.0005020529497414827,
+      "ns_per_eval": 50.20529497414827
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.023346532019786537,
+      "compile_first_execution_seconds": 4.309083917061798,
+      "median_execution_seconds": 0.000647755921818316,
+      "ns_per_eval": 64.7755921818316
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.018374869949184358,
+      "compile_first_execution_seconds": 15.868671550997533,
+      "median_execution_seconds": 0.0005250639514997602,
+      "ns_per_eval": 52.506395149976015
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.023025635979138315,
+      "compile_first_execution_seconds": 4.200591744971462,
+      "median_execution_seconds": 0.0006196619942784309,
+      "ns_per_eval": 61.966199427843094
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.019774373969994485,
+      "compile_first_execution_seconds": 15.842378358007409,
+      "median_execution_seconds": 0.0005576940020546317,
+      "ns_per_eval": 55.76940020546317
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0006338480161502957,
+      0.000607755035161972,
+      0.0006471959641203284,
+      0.0005860229721292853,
+      0.000629532034508884,
+      0.0006308279698714614,
+      0.0005597909912467003
+    ],
+    "grouped-min-live": [
+      0.00046030106022953987,
+      0.00046244298573583364,
+      0.0005211529787629843,
+      0.0005020529497414827,
+      0.0005064130527898669,
+      0.0005153510719537735,
+      0.0005007250001654029
+    ],
+    "compact-lookahead-k32": [
+      0.0005732359131798148,
+      0.0006870409706607461,
+      0.000647755921818316,
+      0.0005667330697178841,
+      0.0006640610517933965,
+      0.000656205927953124,
+      0.0005837059579789639
+    ],
+    "grouped-lookahead-k32": [
+      0.0004897549515590072,
+      0.0005389169091358781,
+      0.0006386780878528953,
+      0.0006222969386726618,
+      0.0005158990388736129,
+      0.0005250639514997602,
+      0.0005095009692013264
+    ],
+    "compact-lookahead-k64": [
+      0.0005616190610453486,
+      0.00067714205943048,
+      0.0006196619942784309,
+      0.0005104010924696922,
+      0.0006258259527385235,
+      0.0006729180458933115,
+      0.0005351509898900986
+    ],
+    "grouped-lookahead-k64": [
+      0.0005646559875458479,
+      0.0006473719840869308,
+      0.0005516699748113751,
+      0.0005576940020546317,
+      0.0005554419476538897,
+      0.0005262029590085149,
+      0.0005598429124802351
+    ]
+  }
+}

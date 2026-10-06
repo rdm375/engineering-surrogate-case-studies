@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b32-float32-n10000",
+    "dtype": "float32",
+    "batch_size": 10000,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 186.60229397937655,
+      "compact-lookahead-k64": 191.4248918183148,
+      "compact-min-live": 194.00640157982707,
+      "grouped-lookahead-k32": 237.7702039666474,
+      "grouped-lookahead-k64": 246.3018987327814,
+      "grouped-min-live": 223.48840720951557
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 32,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/artifacts/methane-z-b32-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "compact-lookahead-k32",
+  "selected_ns_per_eval": 186.60229397937655,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.04001311701722443,
+      "compile_first_execution_seconds": 30.717189657036215,
+      "median_execution_seconds": 0.0019400640157982707,
+      "ns_per_eval": 194.00640157982707
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.03990756394341588,
+      "compile_first_execution_seconds": 141.68382949498482,
+      "median_execution_seconds": 0.0022348840720951557,
+      "ns_per_eval": 223.48840720951557
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 0.05535915098153055,
+      "compile_first_execution_seconds": 30.270966741954908,
+      "median_execution_seconds": 0.0018660229397937655,
+      "ns_per_eval": 186.60229397937655
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 0.06253343599382788,
+      "compile_first_execution_seconds": 140.89722140098456,
+      "median_execution_seconds": 0.002377702039666474,
+      "ns_per_eval": 237.7702039666474
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 0.05951770790852606,
+      "compile_first_execution_seconds": 32.7224160740152,
+      "median_execution_seconds": 0.001914248918183148,
+      "ns_per_eval": 191.4248918183148
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 0.06242928304709494,
+      "compile_first_execution_seconds": 126.93481116602197,
+      "median_execution_seconds": 0.002463018987327814,
+      "ns_per_eval": 246.3018987327814
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0019730189815163612,
+      0.0019625540589913726,
+      0.0019646070431917906,
+      0.0019400640157982707,
+      0.001939420006237924,
+      0.0019388030050322413,
+      0.0018750950694084167
+    ],
+    "grouped-min-live": [
+      0.002247936907224357,
+      0.0022489019902423024,
+      0.0022241210099309683,
+      0.0022106970427557826,
+      0.0021874619415029883,
+      0.0022348840720951557,
+      0.002304301946423948
+    ],
+    "compact-lookahead-k32": [
+      0.001982858986593783,
+      0.0019068759866058826,
+      0.0019418209558352828,
+      0.0018660229397937655,
+      0.0018615180160850286,
+      0.0018578540766611695,
+      0.0018526240019127727
+    ],
+    "grouped-lookahead-k32": [
+      0.0024828079622238874,
+      0.002410806016996503,
+      0.002333013922907412,
+      0.002377702039666474,
+      0.0023319770116358995,
+      0.0023878230713307858,
+      0.0023500719107687473
+    ],
+    "compact-lookahead-k64": [
+      0.0020564700243994594,
+      0.001926958910189569,
+      0.0019250039476901293,
+      0.0018921319860965014,
+      0.0018963520415127277,
+      0.0018948459764942527,
+      0.001914248918183148
+    ],
+    "grouped-lookahead-k64": [
+      0.0024996099527925253,
+      0.0025246349396184087,
+      0.002498131012544036,
+      0.002463018987327814,
+      0.0024028499610722065,
+      0.002343254047445953,
+      0.0023204379249364138
+    ]
+  }
+}

@@ -1,18 +1,18 @@
 {
   "schema_version": 2,
   "profile_kind": "native-dag-execution",
-  "name": "thermogpu-b16-float32-n1000",
+  "name": "thermogpu-b16-float32-n1",
   "dtype": "float32",
-  "batch_size": 1000,
+  "batch_size": 1,
   "backend": "gpu",
   "device": "cuda:0",
   "policy_costs": {
-    "compact-lookahead-k32": 403.8059851154685,
-    "compact-lookahead-k64": 440.840027295053,
-    "compact-min-live": 425.5759995430708,
-    "grouped-lookahead-k32": 185.22702157497406,
-    "grouped-lookahead-k64": 178.05094830691814,
-    "grouped-min-live": 180.8410743251443
+    "compact-lookahead-k32": 217242.04998463392,
+    "compact-lookahead-k64": 218719.01117265224,
+    "compact-min-live": 216585.0019082427,
+    "grouped-lookahead-k32": 206465.01798182726,
+    "grouped-lookahead-k64": 206873.98500740528,
+    "grouped-min-live": 139915.96642881632
   },
   "policy_failures": {},
   "metadata": {

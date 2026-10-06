@@ -1,0 +1,130 @@
+{
+  "profile": {
+    "schema_version": 2,
+    "profile_kind": "native-dag-execution",
+    "name": "thermogpu-b128-float32-n100",
+    "dtype": "float32",
+    "batch_size": 100,
+    "backend": "gpu",
+    "device": "cuda:0",
+    "policy_costs": {
+      "compact-lookahead-k32": 9062.089957296848,
+      "compact-lookahead-k64": 8937.229868024588,
+      "compact-min-live": 8631.600067019463,
+      "grouped-lookahead-k32": 38114.27974142134,
+      "grouped-lookahead-k64": 47786.49075888097,
+      "grouped-min-live": 72770.35037986934
+    },
+    "policy_failures": {},
+    "metadata": {
+      "budget": 128,
+      "repeats": 7,
+      "warmup": 2,
+      "seed": 20261004,
+      "artifact": "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/artifacts/methane-z-b128-native.cpwa",
+      "jax_version": "0.11.2",
+      "jax_backend": "gpu",
+      "jax_device": "cuda:0",
+      "jax_devices": [
+        "cuda:0"
+      ],
+      "canonical_gpu_run": true
+    }
+  },
+  "selected_policy": "compact-min-live",
+  "selected_ns_per_eval": 8631.600067019463,
+  "phase_timings": {
+    "compact-min-live": {
+      "lowering_seconds": 0.4346378450281918,
+      "compile_first_execution_seconds": 6.567063624039292,
+      "median_execution_seconds": 0.0008631600067019463,
+      "ns_per_eval": 8631.600067019463
+    },
+    "grouped-min-live": {
+      "lowering_seconds": 0.6155229069991037,
+      "compile_first_execution_seconds": 575.4615708909696,
+      "median_execution_seconds": 0.007277035037986934,
+      "ns_per_eval": 72770.35037986934
+    },
+    "compact-lookahead-k32": {
+      "lowering_seconds": 1.2505368679994717,
+      "compile_first_execution_seconds": 9.343486275989562,
+      "median_execution_seconds": 0.0009062089957296848,
+      "ns_per_eval": 9062.089957296848
+    },
+    "grouped-lookahead-k32": {
+      "lowering_seconds": 1.462505560950376,
+      "compile_first_execution_seconds": 553.6827823759522,
+      "median_execution_seconds": 0.003811427974142134,
+      "ns_per_eval": 38114.27974142134
+    },
+    "compact-lookahead-k64": {
+      "lowering_seconds": 1.6219602500787005,
+      "compile_first_execution_seconds": 8.82165731897112,
+      "median_execution_seconds": 0.0008937229868024588,
+      "ns_per_eval": 8937.229868024588
+    },
+    "grouped-lookahead-k64": {
+      "lowering_seconds": 1.7513358379947022,
+      "compile_first_execution_seconds": 308.2151704150019,
+      "median_execution_seconds": 0.004778649075888097,
+      "ns_per_eval": 47786.49075888097
+    }
+  },
+  "trials_seconds": {
+    "compact-min-live": [
+      0.0009152339771389961,
+      0.00078625010792166,
+      0.0009248099522665143,
+      0.000845088972710073,
+      0.0008631600067019463,
+      0.0008310080738738179,
+      0.0008804639801383018
+    ],
+    "grouped-min-live": [
+      0.007190084899775684,
+      0.007392155937850475,
+      0.007277035037986934,
+      0.007319239084608853,
+      0.007243621977977455,
+      0.007308940985240042,
+      0.007197642931714654
+    ],
+    "compact-lookahead-k32": [
+      0.0016898100730031729,
+      0.0009350029285997152,
+      0.0008880059467628598,
+      0.0008474780479446054,
+      0.0009163040667772293,
+      0.0008187259081751108,
+      0.0009062089957296848
+    ],
+    "grouped-lookahead-k32": [
+      0.003811427974142134,
+      0.003763417014852166,
+      0.0038221089635044336,
+      0.004038620973005891,
+      0.0038289480144158006,
+      0.0037262600380927324,
+      0.0037566120736300945
+    ],
+    "compact-lookahead-k64": [
+      0.0010622440604493022,
+      0.001068830955773592,
+      0.0010771520901471376,
+      0.0008845499251037836,
+      0.0008937229868024588,
+      0.0008392510935664177,
+      0.0008481529075652361
+    ],
+    "grouped-lookahead-k64": [
+      0.005213271942920983,
+      0.004778649075888097,
+      0.0046013579703867435,
+      0.004929236019961536,
+      0.004832562990486622,
+      0.004680165089666843,
+      0.004665900953114033
+    ]
+  }
+}
