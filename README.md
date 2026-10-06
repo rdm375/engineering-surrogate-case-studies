@@ -98,3 +98,20 @@ ID and submission command under `raw-results/slurm/` for provenance.
 The Slurm templates reference the case-study collectors; as those collectors
 are implemented, local and cluster execution will therefore exercise the same
 measurement code rather than parallel benchmark implementations.
+
+## Automated ThermoGPU V1 pipeline
+
+The complete local experiment is orchestrated by
+`case-studies/thermogpu/scripts/run_study.py`. It reads the frozen budgets and
+batch sizes from `configs/study-v1.toml`, preserves the single shared TDAR
+validation sweep, builds exact native DAGs, calibrates all legal CPWA-ReLU GPU
+execution policies, benchmarks the empirically selected policy, processes the
+retained evidence, regenerates figures, and writes the Markdown report.
+
+The pipeline is resumable: a stage whose declared outputs are already present
+is skipped. Use `--force` to rerun selected stages, `--from-stage` and
+`--through-stage` for partial runs, `--list-stages` to inspect the stage graph,
+and `--dry-run` to print commands without executing them. GPU calibration and
+surrogate benchmarking use `--cpwa-python` (by default the CPWA-ReLU virtual
+environment) so they cannot silently fall back to the case-study environment's
+CPU-only Python. The canonical GPU calibration protocol screens every legal policy with 2 timing samples, then confirms at least the 2 fastest policies (plus any within 10% of the screening winner) using the configured canonical repeat count.

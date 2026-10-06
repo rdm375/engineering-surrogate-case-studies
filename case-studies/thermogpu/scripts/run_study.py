@@ -78,7 +78,7 @@ def build_stages(args) -> list[Stage]:
               [py, str(SCRIPTS / "build_native_dags.py"), "--budgets", *budget_args, *common_cpwa],
               tuple(RAW / "surrogate-performance" / f"budget-{b}" / "artifacts" / f"methane-z-b{b}-native.cpwa" for b in budgets)),
         Stage("calibrate", "calibrate every legal GPU execution policy",
-              [cpwa_py, str(SCRIPTS / "calibrate_surrogate_execution.py"), "--budgets", *budget_args, "--batches", *batch_args, "--dtype", args.dtype, "--repeats", str(args.repeats), "--warmup", str(args.warmup), "--seed", str(args.calibration_seed), *common_cpwa],
+              [cpwa_py, str(SCRIPTS / "calibrate_surrogate_execution.py"), "--budgets", *budget_args, "--batches", *batch_args, "--dtype", args.dtype, "--repeats", str(args.repeats), "--screen-repeats", "2", "--confirm-top", "2", "--near-tie-percent", "10", "--warmup", str(args.warmup), "--seed", str(args.calibration_seed), *common_cpwa],
               tuple(RAW / "surrogate-performance" / f"budget-{b}" / "calibration" / f"{args.dtype}-b{n}.json" for b in budgets for n in batches)),
         Stage("surrogate-benchmark", "benchmark empirically selected GPU policies",
               [cpwa_py, str(SCRIPTS / "collect_surrogate_performance.py"), "--budgets", *budget_args, "--batches", *batch_args, "--dtype", args.dtype, "--repeats", str(args.repeats), "--warmup", str(args.warmup), "--seed", str(args.benchmark_seed), *common_cpwa],
