@@ -1,0 +1,190 @@
+{
+  "updated_utc": "2026-10-06T22:09:11.787421+00:00",
+  "stages": [
+    {
+      "stage": "environment",
+      "status": "retained-evidence",
+      "evidence": [
+        "case-studies/thermogpu/raw-results/environment.json"
+      ]
+    },
+    {
+      "stage": "direct",
+      "status": "retained-evidence",
+      "evidence": [
+        "case-studies/thermogpu/raw-results/direct/scaling-b1-10-100-1000-10000-100000-1000000.json"
+      ]
+    },
+    {
+      "stage": "direct-process",
+      "status": "ok",
+      "returncode": 0,
+      "started_utc": "2026-10-06T22:09:08.405814+00:00",
+      "finished_utc": "2026-10-06T22:09:08.475566+00:00",
+      "command": [
+        "/usr/bin/python3.14",
+        "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/scripts/process_direct.py"
+      ],
+      "outputs": [
+        "case-studies/thermogpu/processed-results/direct-methane.csv"
+      ]
+    },
+    {
+      "stage": "direct-plot",
+      "status": "ok",
+      "returncode": 0,
+      "started_utc": "2026-10-06T22:09:08.476013+00:00",
+      "finished_utc": "2026-10-06T22:09:10.176548+00:00",
+      "command": [
+        "/usr/bin/python3.14",
+        "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/scripts/plot_direct.py"
+      ],
+      "outputs": [
+        "case-studies/thermogpu/figures/direct-throughput-vs-batch.png"
+      ]
+    },
+    {
+      "stage": "surrogates",
+      "status": "retained-evidence",
+      "evidence": [
+        "case-studies/thermogpu/raw-results/surrogates/normalized.json",
+        "case-studies/thermogpu/raw-results/surrogates/validation-points.npy",
+        "case-studies/thermogpu/raw-results/surrogates/validation-truth.npy"
+      ]
+    },
+    {
+      "stage": "surrogate-process",
+      "status": "ok",
+      "returncode": 0,
+      "started_utc": "2026-10-06T22:09:10.177580+00:00",
+      "finished_utc": "2026-10-06T22:09:10.261900+00:00",
+      "command": [
+        "/usr/bin/python3.14",
+        "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/scripts/process_surrogates.py"
+      ],
+      "outputs": [
+        "case-studies/thermogpu/processed-results/surrogate-accuracy.csv"
+      ]
+    },
+    {
+      "stage": "surrogate-plot",
+      "status": "ok",
+      "returncode": 0,
+      "started_utc": "2026-10-06T22:09:10.262359+00:00",
+      "finished_utc": "2026-10-06T22:09:11.544384+00:00",
+      "command": [
+        "/usr/bin/python3.14",
+        "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/scripts/plot_surrogate_accuracy.py"
+      ],
+      "outputs": [
+        "case-studies/thermogpu/figures/surrogate-accuracy-vs-budget.png"
+      ]
+    },
+    {
+      "stage": "native-dags",
+      "status": "retained-evidence",
+      "evidence": [
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/artifacts/methane-z-b16-native.cpwa",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/artifacts/methane-z-b32-native.cpwa",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/artifacts/methane-z-b64-native.cpwa",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/artifacts/methane-z-b128-native.cpwa",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/artifacts/methane-z-b256-native.cpwa"
+      ]
+    },
+    {
+      "stage": "calibrate",
+      "status": "retained-evidence",
+      "evidence": [
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b1.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b10.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b100.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b1000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b10000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b100000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-16/calibration/float32-b1000000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b1.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b10.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b100.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b1000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b10000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b100000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-32/calibration/float32-b1000000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b1.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b10.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b100.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b1000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b10000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b100000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-64/calibration/float32-b1000000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b1.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b10.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b100.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b1000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b10000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b100000.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-128/calibration/float32-b1000000.failed.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b1.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b10.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b100.json",
+        "case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b1000.json"
+      ],
+      "declarations": [
+        "budget=256,batch=10000:deferred",
+        "budget=256,batch=100000:deferred",
+        "budget=256,batch=1000000:deferred"
+      ]
+    },
+    {
+      "stage": "surrogate-benchmark",
+      "status": "retained-evidence",
+      "evidence": [],
+      "declarations": [
+        "legacy aggregate not required; authoritative performance evidence is retained by calibrate"
+      ]
+    },
+    {
+      "stage": "performance-process",
+      "status": "omitted-from-reproduction"
+    },
+    {
+      "stage": "performance-plot",
+      "status": "omitted-from-reproduction"
+    },
+    {
+      "stage": "master-pareto",
+      "status": "ok",
+      "returncode": 0,
+      "started_utc": "2026-10-06T22:09:11.548684+00:00",
+      "finished_utc": "2026-10-06T22:09:11.626512+00:00",
+      "command": [
+        "/usr/bin/python3.14",
+        "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/scripts/process_master_pareto.py"
+      ],
+      "outputs": [
+        "case-studies/thermogpu/processed-results/master-performance-terrain.csv",
+        "case-studies/thermogpu/processed-results/master-pareto-global.csv",
+        "case-studies/thermogpu/processed-results/surrogate-pareto.csv"
+      ]
+    },
+    {
+      "stage": "analysis",
+      "status": "ok",
+      "returncode": 0,
+      "started_utc": "2026-10-06T22:09:11.627298+00:00",
+      "finished_utc": "2026-10-06T22:09:11.786902+00:00",
+      "command": [
+        "/usr/bin/python3.14",
+        "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/scripts/analyze_study.py"
+      ],
+      "outputs": [
+        "case-studies/thermogpu/processed-results/exact-crossover.csv",
+        "case-studies/thermogpu/processed-results/surrogate-accuracy-cost.csv",
+        "case-studies/thermogpu/processed-results/dominance-analysis.csv",
+        "case-studies/thermogpu/processed-results/dag-scaling.csv",
+        "case-studies/thermogpu/processed-results/scaling-analysis.csv",
+        "case-studies/thermogpu/processed-results/feasibility-analysis.csv",
+        "case-studies/thermogpu/processed-results/study-summary.json"
+      ]
+    }
+  ]
+}

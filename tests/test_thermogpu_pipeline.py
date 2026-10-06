@@ -248,3 +248,231 @@ def test_conclusion_analysis_accepts_deferred_but_not_pending():
         ["additional_measurements_required_for_current_conclusion"]
         is True
     )
+
+
+def test_pipeline_classifies_evidence_producers():
+    m = load_module()
+
+    class Args:
+        config = ROOT / "case-studies/thermogpu/configs/study-v1.toml"
+        thermogpu_root = Path("/nvme/Sync/ThermoGPU")
+        tdar_root = Path("/nvme/Sync/tdar")
+        cpwa_relu_root = Path("/nvme/Sync/cpwa-relu")
+        cpwa_python = Path("/nvme/Sync/cpwa-relu/.venv/bin/python")
+        dtype = "float32"
+        repeats = 7
+        warmup = 2
+        calibration_seed = 20261004
+        benchmark_seed = 20261005
+
+    stages = {stage.name: stage for stage in m.build_stages(Args())}
+
+    expected = {
+        "environment",
+        "direct",
+        "surrogates",
+        "native-dags",
+        "calibrate",
+        "surrogate-benchmark",
+    }
+
+    assert {
+        name for name, stage in stages.items() if stage.evidence_producer
+    } == expected
+
+    assert not stages["direct-process"].evidence_producer
+    assert not stages["master-pareto"].evidence_producer
+    assert not stages["analysis"].evidence_producer
+    assert not stages["report"].evidence_producer
+
+
+def test_analysis_stage_declares_scaling_output():
+    m = load_module()
+
+    class Args:
+        config = ROOT / "case-studies/thermogpu/configs/study-v1.toml"
+        thermogpu_root = Path("/nvme/Sync/ThermoGPU")
+        tdar_root = Path("/nvme/Sync/tdar")
+        cpwa_relu_root = Path("/nvme/Sync/cpwa-relu")
+        cpwa_python = Path("/nvme/Sync/cpwa-relu/.venv/bin/python")
+        dtype = "float32"
+        repeats = 7
+        warmup = 2
+        calibration_seed = 20261004
+        benchmark_seed = 20261005
+
+    stages = {stage.name: stage for stage in m.build_stages(Args())}
+
+    assert any(
+        str(path).endswith("scaling-analysis.csv")
+        for path in stages["analysis"].outputs
+    )
+
+
+def test_reproduction_excludes_legacy_performance_aggregate():
+    m = load_module()
+
+    class Args:
+        config = ROOT / "case-studies/thermogpu/configs/study-v1.toml"
+        thermogpu_root = Path("/nvme/Sync/ThermoGPU")
+        tdar_root = Path("/nvme/Sync/tdar")
+        cpwa_relu_root = Path("/nvme/Sync/cpwa-relu")
+        cpwa_python = Path("/nvme/Sync/cpwa-relu/.venv/bin/python")
+        dtype = "float32"
+        repeats = 7
+        warmup = 2
+        calibration_seed = 20261004
+        benchmark_seed = 20261005
+
+    stages = {stage.name: stage for stage in m.build_stages(Args())}
+
+    assert stages["performance-process"].reproduce is False
+    assert stages["performance-plot"].reproduce is False
+
+    assert stages["master-pareto"].reproduce is True
+    assert stages["analysis"].reproduce is True
+    assert stages["report"].reproduce is True
+
+
+def test_calibration_reproduction_uses_raw_success_failure_and_deferrals(
+    tmp_path, monkeypatch
+):
+    m = load_module()
+
+    raw = tmp_path / "case-studies/thermogpu/raw-results"
+    monkeypatch.setattr(m, "ROOT", tmp_path)
+    monkeypatch.setattr(m, "RAW", raw)
+
+    batches = (1, 10, 100, 1000, 10000, 100000, 1000000)
+    budgets = (16, 32, 64, 128, 256)
+    deferred = set(m.V1_DEFERRED_CALIBRATIONS)
+
+    outputs = []
+    for budget in budgets:
+        for batch in batches:
+            nominal = (
+                raw
+                / "surrogate-performance"
+                / f"budget-{budget}"
+                / "calibration"
+                / f"float32-b{batch}.json"
+            )
+            outputs.append(nominal)
+
+            if (budget, batch) in deferred:
+                continue
+
+            nominal.parent.mkdir(parents=True, exist_ok=True)
+
+            if (budget, batch) == (128, 1000000):
+                nominal.with_suffix(".failed.json").write_text(
+                    '{"all_failures_resource_related": true}\n'
+                )
+            else:
+                nominal.write_text('{"status": "complete"}\n')
+
+    stage = m.Stage(
+        "calibrate",
+        "calibrate",
+        ["true"],
+        tuple(outputs),
+        evidence_producer=True,
+    )
+
+    ready, missing, evidence, declarations = m.retained_evidence_ready(stage)
+
+    assert ready
+    assert missing == []
+    assert len(evidence) == 32
+    assert sum(path.name.endswith(".failed.json") for path in evidence) == 1
+    assert not any(
+        path.name in {
+            "float32-b10000.json",
+            "float32-b100000.json",
+            "float32-b1000000.json",
+        }
+        and path.parents[1].name == "budget-256"
+        for path in evidence
+    )
+    assert declarations == [
+        "budget=256,batch=10000:deferred",
+        "budget=256,batch=100000:deferred",
+        "budget=256,batch=1000000:deferred",
+    ]
+
+
+def test_calibration_reproduction_rejects_unexplained_missing_cell(
+    tmp_path, monkeypatch
+):
+    m = load_module()
+
+    raw = tmp_path / "case-studies/thermogpu/raw-results"
+    monkeypatch.setattr(m, "ROOT", tmp_path)
+    monkeypatch.setattr(m, "RAW", raw)
+
+    outputs = []
+    for budget in (16, 32, 64, 128, 256):
+        for batch in (1, 10, 100, 1000, 10000, 100000, 1000000):
+            nominal = (
+                raw
+                / "surrogate-performance"
+                / f"budget-{budget}"
+                / "calibration"
+                / f"float32-b{batch}.json"
+            )
+            outputs.append(nominal)
+
+            if (budget, batch) in set(m.V1_DEFERRED_CALIBRATIONS):
+                continue
+
+            # Deliberately leave B64 x 1000 unexplained.
+            if (budget, batch) == (64, 1000):
+                continue
+
+            nominal.parent.mkdir(parents=True, exist_ok=True)
+            if (budget, batch) == (128, 1000000):
+                nominal.with_suffix(".failed.json").write_text(
+                    '{"all_failures_resource_related": true}\n'
+                )
+            else:
+                nominal.write_text('{"status": "complete"}\n')
+
+    stage = m.Stage(
+        "calibrate",
+        "calibrate",
+        ["true"],
+        tuple(outputs),
+        evidence_producer=True,
+    )
+
+    ready, missing, evidence, declarations = m.retained_evidence_ready(stage)
+
+    assert not ready
+    assert missing == ["budget=64,batch=1000"]
+    assert len(evidence) == 31
+    assert len(declarations) == 3
+
+
+def test_legacy_surrogate_benchmark_is_not_required_reproduction_evidence():
+    m = load_module()
+
+    stage = m.Stage(
+        "surrogate-benchmark",
+        "legacy benchmark aggregate",
+        ["true"],
+        (
+            m.RAW / "surrogate-performance/benchmark-float32.csv",
+            m.RAW / "surrogate-performance/benchmark-float32.json",
+        ),
+        evidence_producer=True,
+    )
+
+    ready, missing, evidence, declarations = m.retained_evidence_ready(stage)
+
+    assert ready
+    assert missing == []
+    assert evidence == []
+    assert declarations == [
+        "legacy aggregate not required; authoritative performance evidence "
+        "is retained by calibrate"
+    ]

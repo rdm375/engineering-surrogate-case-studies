@@ -27,7 +27,7 @@ infeasible or cannot materially affect the conclusions.
 | M10 | Define Pareto analyses | Complete | Batch-conditioned and conventional frontiers |
 | M11 | Produce publication-quality figures | Near complete | Performance/Pareto figures |
 | M12 | Interpret engineering results | Complete | Automated crossover, accuracy-cost, dominance, empirical scaling, feasibility boundary, and V1 conclusion generation |
-| M13 | Perform final reproducibility run | Pending | Clean execution from frozen inputs |
+| M13 | Perform final reproducibility run | Complete | Retained evidence regenerated all V1 scientific results through M12 analysis; processed data were unchanged and regenerated figures were pixel-identical |
 | M14 | Generate V1 report | Pending | Reproducible Markdown report |
 | M15 | Freeze V1 release | Pending | Clean repository, commit, tag |
 
@@ -177,6 +177,30 @@ Additional measurements are required only when they can plausibly:
 - change a surrogate accuracy/cost conclusion,
 - establish an unknown feasibility boundary, or
 - resolve an unexplained numerical or performance anomaly.
+
+## M13 — Reproducibility result
+
+The V1 reproduction run was performed from retained experimental evidence using
+the pipeline's evidence-only reproduction mode. Evidence-producing stages were
+preserved rather than rerun, while derived processing, plotting, master-Pareto,
+and engineering-analysis stages were regenerated.
+
+The regenerated processed scientific results produced no numerical or textual
+differences from the retained V1 results. The direct-throughput and
+surrogate-accuracy PNG files were not byte-identical because of PNG
+serialization differences, but decoded image dimensions and RGBA pixels were
+identical to the committed figures.
+
+The reproduced engineering conclusion remained:
+
+- 7 exact batch operating points analyzed;
+- 31 surrogate measurements analyzed;
+- 31/31 measured surrogate points dominated by the best exact method at the
+  same batch size; and
+- 0 surrogate points on the conventional global Pareto frontier.
+
+The reproduction run does not rerun expensive experimental measurements merely
+to reproduce derived scientific conclusions.
 
 ## V1 exit criteria
 
