@@ -1,0 +1,35 @@
+[study]
+name = "thermogpu-methane-z-v1"
+description = "Direct versus surrogate evaluation of methane Peng-Robinson Z(T,P)"
+schema_version = 1
+
+[software]
+thermogpu_version = "v1.1.0"
+tdar_version = "v0.3.0"
+cpwa_relu_version = "v0.2.0"
+
+[domain]
+temperature_min_K = 250.0
+temperature_max_K = 350.0
+pressure_min_Pa = 1000000.0
+pressure_max_Pa = 10000000.0
+
+[validation]
+method = "sobol"
+points = 100000
+seed = 20261002
+
+[surrogate]
+initial_points = 16
+budgets = [16, 32, 64, 128, 256]
+
+[benchmark]
+batch_sizes = [1, 10, 100, 1000, 10000, 100000, 1000000]
+
+[accuracy]
+metrics = ["rmse", "p99_abs", "linf"]
+
+[outputs]
+raw_results = "case-studies/thermogpu/raw-results"
+processed_results = "case-studies/thermogpu/processed-results"
+figures = "case-studies/thermogpu/figures"

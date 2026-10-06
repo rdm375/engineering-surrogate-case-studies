@@ -321,3 +321,28 @@ After V1 is frozen:
 
 These extensions should reuse the experimental framework established here
 rather than redefine the ThermoGPU V1 experiment.
+
+---
+
+## 17. Execution environments
+
+The V1 study may be executed either directly on a workstation or through a
+Slurm-managed HPC system. Execution environment is an experimental provenance
+attribute, not a change to the numerical method.
+
+Slurm runs should retain, when available:
+
+- job and array-task identifiers;
+- node name/list;
+- requested CPU and GPU resources;
+- visible accelerator assignment;
+- stdout and stderr logs; and
+- the exact submission command.
+
+Parameter sweeps should use job arrays where this maps naturally onto the
+experiment. Site-specific partition, account, reservation, and QOS names shall
+not be embedded in the scientific specification.
+
+Local and Slurm execution must feed the same raw-result schemas and downstream
+processing/reporting pipeline. A scheduler-specific result format must not
+create a second analysis implementation.

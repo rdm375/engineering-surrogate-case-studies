@@ -1,0 +1,16 @@
+{
+  "experiment": "methane-z-tdar-v1",
+  "oracle": "ThermoGPU Peng-Robinson methane Z(T,P)",
+  "thermogpu_version": "v1.1.0",
+  "tdar_version": "v0.3.0",
+  "cpwa_relu_version": "v0.2.0",
+  "temperature_K": [250.0, 350.0],
+  "pressure_Pa": [1000000.0, 10000000.0],
+  "initial_points": 16,
+  "budgets": [16, 32, 64, 128, 256],
+  "validation": {
+    "seed": 20261002,
+    "points": 100000,
+    "metrics": ["rmse", "p99_abs", "linf"]
+  }
+}
