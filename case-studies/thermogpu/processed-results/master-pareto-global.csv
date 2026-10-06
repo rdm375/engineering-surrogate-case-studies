@@ -1,0 +1,8 @@
+method,backend,batch_size,budget,threads,policy,ns_per_eval,evaluations_per_second,rmse,p99_abs,linf,exact,feasible,global_pareto,surrogate_pareto,best_exact_ns_per_eval,cost_ratio_vs_best_exact,evidence
+CPU scalar,cpu,1,,1,,577.1433476916312,1732671.7946237195,0,0,0,True,True,True,False,577.1433476916312,,direct benchmark
+CPU scalar,cpu,10,,1,,321.30652211731586,3112292.876628501,0,0,0,True,True,True,False,321.30652211731586,,direct benchmark
+CPU OpenMP,cpu_parallel,100,,4,,188.81037401951406,5296319.15191613,0,0,0,True,True,True,False,188.81037401951406,,direct benchmark
+GPU direct resident,gpu_direct_resident,1000,,0,,20.819893532474648,48030985.290112585,0,0,0,True,True,True,False,20.819893532474648,,direct benchmark
+GPU direct resident,gpu_direct_resident,10000,,0,,10.619721443736731,94164428.44551042,0,0,0,True,True,True,False,10.619721443736731,,direct benchmark
+GPU direct resident,gpu_direct_resident,100000,,0,,8.614518052631578,116083104.57884736,0,0,0,True,True,True,False,8.614518052631578,,direct benchmark
+GPU direct resident,gpu_direct_resident,1000000,,0,,8.352823416666666,119719997.67224418,0,0,0,True,True,True,False,8.352823416666666,,direct benchmark
