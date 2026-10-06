@@ -21,7 +21,7 @@ infeasible or cannot materially affect the conclusions.
 | M4 | Build TDAR surrogate family | Complete | Budgets 16, 32, 64, 128, 256 |
 | M5 | Validate surrogate accuracy | Complete | Shared frozen validation set; RMSE, p99, Linf |
 | M6 | Compile exact CPWA-ReLU DAGs | Complete | Native `.cpwa` artifacts |
-| M7 | Calibrate GPU surrogate execution | Partial | Completed calibration plus retained failure evidence |
+| M7 | Calibrate GPU surrogate execution | Partial / deferred | 31/35 cells complete; B128 x 1M retained as GPU-memory failure evidence; B256 calibrated through batch 1,000; larger B256 batches deferred and are not V1 blockers |
 | M8 | Automate experiment pipeline | Complete | Resumable `scripts/run_study.py` |
 | M9 | Construct master performance terrain | Complete | CPU, parallel CPU, direct GPU, GPU surrogates |
 | M10 | Define Pareto analyses | Complete | Batch-conditioned and conventional frontiers |

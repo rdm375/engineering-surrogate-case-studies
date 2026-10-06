@@ -30,7 +30,7 @@ budget,batch_size,dtype,status,evidence
 256,1,float32,complete,case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b1.json
 256,10,float32,complete,case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b10.json
 256,100,float32,complete,case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b100.json
-256,1000,float32,pending,
+256,1000,float32,complete,case-studies/thermogpu/raw-results/surrogate-performance/budget-256/calibration/float32-b1000.json
 256,10000,float32,pending,
 256,100000,float32,pending,
 256,1000000,float32,pending,
