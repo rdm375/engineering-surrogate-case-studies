@@ -138,6 +138,14 @@ Record each requested budget × batch combination as one of:
 A failed or infeasible point must retain enough evidence to explain the
 classification.
 
+### Automated M12 evidence
+
+`scripts/analyze_study.py` derives the reusable M12 evidence tables from retained
+measurements. It writes exact crossover, surrogate accuracy/cost, dominance,
+DAG-scaling, feasibility, and a machine-readable `study-summary.json`. The
+processor accepts explicit input/output paths so the same analysis contract can
+be reused by later engineering case studies rather than reimplemented per model.
+
 ### M12.6 V1 measurement decision
 
 Before running additional expensive experiments, determine whether the missing

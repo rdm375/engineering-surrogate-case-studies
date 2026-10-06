@@ -56,3 +56,24 @@ def test_calibration_stage_freezes_screen_confirm_protocol(tmp_path):
     assert command[command.index("--near-tie-percent") + 1] == "10"
     assert command[command.index("--repeats") + 1] == "7"
     assert command[command.index("--warmup") + 1] == "2"
+
+
+def test_pipeline_includes_reusable_analysis_stage():
+    m = load_module()
+
+    class Args:
+        config = ROOT / "case-studies/thermogpu/configs/study-v1.toml"
+        thermogpu_root = Path("/nvme/Sync/ThermoGPU")
+        tdar_root = Path("/nvme/Sync/tdar")
+        cpwa_relu_root = Path("/nvme/Sync/cpwa-relu")
+        cpwa_python = Path("/nvme/Sync/cpwa-relu/.venv/bin/python")
+        dtype = "float32"
+        repeats = 7
+        warmup = 2
+        calibration_seed = 20261004
+        benchmark_seed = 20261005
+
+    stages = {stage.name: stage for stage in m.build_stages(Args())}
+    assert "master-pareto" in stages
+    assert "analysis" in stages
+    assert any(str(x).endswith("study-summary.json") for x in stages["analysis"].outputs)
