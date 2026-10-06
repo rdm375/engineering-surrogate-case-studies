@@ -1,0 +1,1 @@
+ThermoGPU M7 component-count scaling; samples=9 target_ms=200 max_threads=8

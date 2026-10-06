@@ -1,0 +1,44 @@
+{
+  "platform": {
+    "system": "Linux",
+    "release": "7.0.0-34-generic",
+    "machine": "x86_64",
+    "python": "3.14.4",
+    "processor": ""
+  },
+  "repositories": {
+    "ThermoGPU": {
+      "path": "/nvme/Sync/ThermoGPU",
+      "commit": "180bbcb0eb70747037013dc3ea44032e10185f74",
+      "describe": "v1.1.0",
+      "branch": "main",
+      "dirty": false,
+      "remote": "git@github.com:rdm375/ThermoGPU.git"
+    },
+    "TDAR": {
+      "path": "/nvme/Sync/tdar",
+      "commit": "527144927bdab210b2f721b2a481ce835d0023a7",
+      "describe": "v0.3.0",
+      "branch": "master",
+      "dirty": false,
+      "remote": "git@github.com:rdm375/tdar.git"
+    },
+    "CPWA-ReLU": {
+      "path": "/nvme/Sync/cpwa-relu",
+      "commit": "6ac34968992ae17c079f92ba37c0deacd5b69a19",
+      "describe": "v0.2.0",
+      "branch": "master",
+      "dirty": false,
+      "remote": "git@github.com:rdm375/cpwa-relu.git"
+    },
+    "case-study": {
+      "path": "/nvme/Sync/engineering-surrogate-case-studies",
+      "commit": "f83f38f07ed56cdcd49599e2be22bf60fe0d0ee1",
+      "describe": "thermogpu-spec-v1-1-gf83f38f",
+      "branch": "master",
+      "dirty": true,
+      "remote": "git@github.com:rdm375/engineering-surrogate-case-studies.git"
+    }
+  },
+  "nvidia_smi": "Quadro M3000M, 580.178.04, 4096 MiB"
+}
