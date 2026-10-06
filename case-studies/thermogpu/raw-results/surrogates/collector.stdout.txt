@@ -1,0 +1,21 @@
+evaluating frozen validation truth: 100000 points
+
+=== TDAR budget 16 ===
+simplices=26 rmse=0.00505109 p99=0.0246571 max=0.0445657
+
+=== TDAR budget 32 ===
+simplices=52 rmse=0.00128728 p99=0.00360473 max=0.00619233
+
+=== TDAR budget 64 ===
+simplices=108 rmse=0.000538864 p99=0.00152782 max=0.00217053
+
+=== TDAR budget 128 ===
+simplices=221 rmse=0.0002588 p99=0.000761638 max=0.00106143
+
+=== TDAR budget 256 ===
+simplices=464 rmse=0.000110555 p99=0.000324664 max=0.000536593
+
+=== accuracy/complexity Pareto budgets ===
+16 32 64 128 256
+wrote: /nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/summary.csv
+wrote: /nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/report.json

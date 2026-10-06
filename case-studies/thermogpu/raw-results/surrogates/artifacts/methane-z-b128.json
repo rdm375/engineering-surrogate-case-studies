@@ -1,0 +1,23 @@
+{
+  "dimension": 2,
+  "format": "simplicial-cpwa",
+  "format_version": 1,
+  "metadata": {
+    "budget": 128,
+    "initial_points": 16,
+    "pressure_Pa": [
+      1000000.0,
+      10000000.0
+    ],
+    "seed": 20261002,
+    "target": "methane-Z",
+    "temperature_K": [
+      250.0,
+      350.0
+    ],
+    "validation_seed": 20261003
+  },
+  "points": 128,
+  "producer": "tdar",
+  "simplices": 221
+}

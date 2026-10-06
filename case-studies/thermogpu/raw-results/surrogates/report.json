@@ -1,0 +1,95 @@
+{
+  "domain": {
+    "temperature_K": [
+      250.0,
+      350.0
+    ],
+    "pressure_Pa": [
+      1000000.0,
+      10000000.0
+    ]
+  },
+  "budgets": [
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "validation_points": 100000,
+  "seed": 20261002,
+  "pareto_budgets": [
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "results": [
+    {
+      "budget": 16,
+      "points": 16,
+      "simplices": 26,
+      "tdar_seconds": 0.0059720780700445175,
+      "artifact": "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b16.npz",
+      "mae": 0.0027271280584339128,
+      "rmse": 0.005051091528431866,
+      "p95_abs": 0.008125686842103599,
+      "p99_abs": 0.02465713199542433,
+      "max_abs": 0.04456565716477723,
+      "pareto_accuracy_complexity": true
+    },
+    {
+      "budget": 32,
+      "points": 32,
+      "simplices": 52,
+      "tdar_seconds": 0.016335410997271538,
+      "artifact": "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b32.npz",
+      "mae": 0.000977181975808972,
+      "rmse": 0.0012872836546679307,
+      "p95_abs": 0.002726669882104537,
+      "p99_abs": 0.003604733751391743,
+      "max_abs": 0.006192332666692835,
+      "pareto_accuracy_complexity": true
+    },
+    {
+      "budget": 64,
+      "points": 64,
+      "simplices": 108,
+      "tdar_seconds": 0.03699713700916618,
+      "artifact": "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b64.npz",
+      "mae": 0.0004108039334860778,
+      "rmse": 0.0005388639856246739,
+      "p95_abs": 0.0011228235536337278,
+      "p99_abs": 0.0015278178529134292,
+      "max_abs": 0.0021705286812349067,
+      "pareto_accuracy_complexity": true
+    },
+    {
+      "budget": 128,
+      "points": 128,
+      "simplices": 221,
+      "tdar_seconds": 0.07925232395064086,
+      "artifact": "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b128.npz",
+      "mae": 0.0001965963466991537,
+      "rmse": 0.0002587998168556151,
+      "p95_abs": 0.0005377309460972034,
+      "p99_abs": 0.0007616375409485101,
+      "max_abs": 0.0010614325814914949,
+      "pareto_accuracy_complexity": true
+    },
+    {
+      "budget": 256,
+      "points": 256,
+      "simplices": 464,
+      "tdar_seconds": 0.2192713429685682,
+      "artifact": "/nvme/Sync/engineering-surrogate-case-studies/case-studies/thermogpu/raw-results/surrogates/artifacts/methane-z-b256.npz",
+      "mae": 8.37779261969843e-05,
+      "rmse": 0.0001105551162543407,
+      "p95_abs": 0.00022795840421250264,
+      "p99_abs": 0.0003246637863173179,
+      "max_abs": 0.0005365927842213569,
+      "pareto_accuracy_complexity": true
+    }
+  ]
+}
