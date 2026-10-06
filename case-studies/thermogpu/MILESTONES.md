@@ -29,7 +29,7 @@ infeasible or cannot materially affect the conclusions.
 | M12 | Interpret engineering results | Complete | Automated crossover, accuracy-cost, dominance, empirical scaling, feasibility boundary, and V1 conclusion generation |
 | M13 | Perform final reproducibility run | Complete | Retained evidence regenerated all V1 scientific results through M12 analysis; processed data were unchanged and regenerated figures were pixel-identical |
 | M14 | Generate V1 report | Complete | Generated Markdown report consumes authoritative M12 analysis and reproducible publication figures |
-| M15 | Freeze V1 release | Pending | Clean repository, commit, tag |
+| M15 | Freeze V1 release | Complete | Release-facing documentation audited; stale inventory resolved; tracked bytecode removed; clean archive test suite passes; ready for `thermogpu-v1` tag |
 
 ## Frontier terminology
 
@@ -213,6 +213,19 @@ The report records the frozen design, exact-method crossover, surrogate accuracy
 and representation scaling, dominance and Pareto results, feasibility boundary,
 measurement sufficiency, engineering interpretation, limitations, and the
 evidence-only reproduction command.
+
+## M15 — V1 release freeze
+
+The release-facing documentation was audited against the retained V1 evidence.
+The evidence inventory now names the authoritative retained and derived
+artifacts, the top-level README states the V1 result and evidence-only
+reproduction procedure, and generated Python bytecode is excluded from the
+release. The historical aggregate performance stages remain in the pipeline
+only as explicitly legacy, non-reproduction stages.
+
+The V1 release tag is `thermogpu-v1`; `thermogpu-spec-v1` remains the earlier
+frozen specification tag. No new scientific measurements or conclusions were
+introduced during the release freeze.
 
 ## V1 exit criteria
 

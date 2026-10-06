@@ -34,7 +34,14 @@ Frozen software stack:
 - TDAR v0.3.0
 - CPWA-ReLU v0.2.0
 
-See `case-studies/thermogpu/SPEC.md`.
+V1 result: on the measured methane-Z problem and hardware, the surrogate did not
+outperform the best workload-conditioned exact implementation. All 31 measured
+surrogate operating points were dominated by the fastest exact method at the
+same batch size, and no surrogate point was globally Pareto-optimal. This is a
+measured negative result for this case, not a general claim about surrogates.
+
+See `case-studies/thermogpu/reports/thermogpu-v1.md` for the generated V1
+report and `case-studies/thermogpu/SPEC.md` for the frozen study specification.
 
 ### 2. Compressor station
 
@@ -115,3 +122,23 @@ and `--dry-run` to print commands without executing them. GPU calibration and
 surrogate benchmarking use `--cpwa-python` (by default the CPWA-ReLU virtual
 environment) so they cannot silently fall back to the case-study environment's
 CPU-only Python. The canonical GPU calibration protocol screens every legal policy with 2 timing samples, then confirms at least the 2 fastest policies (plus any within 10% of the screening winner) using the configured canonical repeat count.
+
+
+## Reproducing ThermoGPU V1 from retained evidence
+
+The V1 scientific products can be regenerated without rerunning the expensive
+evidence-producing experiments. From a checkout with the frozen upstream
+dependencies available, run:
+
+```bash
+<cpwa-relu-python> case-studies/thermogpu/scripts/run_study.py \
+  --config case-studies/thermogpu/configs/study-v1.toml \
+  --reproduce
+```
+
+Reproduction mode validates and retains experimental evidence, then regenerates
+processed results, publication figures, Pareto analyses, engineering analysis,
+and the final Markdown report. The historical `performance-process` and
+`performance-plot` stages are intentionally omitted in this mode: the
+authoritative V1 analysis consumes retained per-cell calibration evidence
+directly.
