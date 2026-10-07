@@ -8,7 +8,7 @@
 - [x] M6 — Import and inventory retained evidence
 - [x] M7 — Process exact performance
 - [x] M8 — Process surrogate performance
-- [ ] M9 — Construct 35 batch-conditioned Pareto frontiers
+- [x] M9 — Construct 35 batch-conditioned Pareto frontiers
 - [ ] M10 — Analyze exact/surrogate crossover
 - [ ] M11 — Analyze GPU resource-pressure transitions
 - [ ] M12 — Generate figures
