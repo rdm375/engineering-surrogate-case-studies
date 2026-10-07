@@ -54,6 +54,12 @@ FIELDS = [
     "spill_load_bytes",
     "stack_frame_bytes",
     "pareto",
+    "pareto_exact_cpu",
+    "pareto_exact_cpu_omp",
+    "pareto_cpwa_cpu",
+    "pareto_cpwa_cpu_omp",
+    "pareto_exact_gpu",
+    "pareto_cpwa_gpu",
 ]
 
 
@@ -160,6 +166,12 @@ for r in exact_raw:
             "spill_load_bytes": "",
             "stack_frame_bytes": "",
             "pareto": False,
+            "pareto_exact_cpu": False,
+            "pareto_exact_cpu_omp": False,
+            "pareto_cpwa_cpu": False,
+            "pareto_cpwa_cpu_omp": False,
+            "pareto_exact_gpu": False,
+            "pareto_cpwa_gpu": False,
         }
     )
 
@@ -201,6 +213,12 @@ for c in COMPONENTS:
                     "stack_frame_bytes":
                         int(g["stack_frame_bytes"]),
                     "pareto": False,
+            "pareto_exact_cpu": False,
+            "pareto_exact_cpu_omp": False,
+            "pareto_cpwa_cpu": False,
+            "pareto_cpwa_cpu_omp": False,
+            "pareto_exact_gpu": False,
+            "pareto_cpwa_gpu": False,
                 }
             )
 
@@ -255,10 +273,17 @@ for c in COMPONENTS:
                         "spill_load_bytes": "",
                         "stack_frame_bytes": "",
                         "pareto": False,
+            "pareto_exact_cpu": False,
+            "pareto_exact_cpu_omp": False,
+            "pareto_cpwa_cpu": False,
+            "pareto_cpwa_cpu_omp": False,
+            "pareto_exact_gpu": False,
+            "pareto_cpwa_gpu": False,
                     }
                 )
 
 
+groups = defaultdict(list)
 groups = defaultdict(list)
 
 for r in rows:
@@ -273,15 +298,97 @@ expected_groups = {
 if set(groups) != expected_groups:
     raise RuntimeError("incomplete heterogeneous Pareto coverage")
 
+
+def family_rows(
+    group: list[dict],
+    family: str,
+) -> list[dict]:
+    """Return candidates belonging to one execution family."""
+
+    if family == "exact_cpu":
+        return [
+            r for r in group
+            if (
+                r["candidate_type"] == "exact"
+                and r["backend"] == "scalar"
+            )
+        ]
+
+    if family == "exact_cpu_omp":
+        return [
+            r for r in group
+            if (
+                r["candidate_type"] == "exact"
+                and r["backend"] == "openmp"
+            )
+        ]
+
+    if family == "cpwa_cpu":
+        return [
+            r for r in group
+            if (
+                r["candidate_type"] == "surrogate"
+                and r["backend"] == "avx2"
+            )
+        ]
+
+    if family == "cpwa_cpu_omp":
+        return [
+            r for r in group
+            if (
+                r["candidate_type"] == "surrogate"
+                and r["backend"] == "avx2-omp4"
+            )
+        ]
+
+    if family == "exact_gpu":
+        return [
+            r for r in group
+            if (
+                r["candidate_type"] == "exact"
+                and r["backend"] in {
+                    "cuda_fixed_resident",
+                    "cuda_generic_resident",
+                }
+            )
+        ]
+
+    if family == "cpwa_gpu":
+        return [
+            r for r in group
+            if (
+                r["candidate_type"] == "surrogate"
+                and r["backend"] == "cpwa-cuda"
+            )
+        ]
+
+    raise ValueError(f"unknown execution family: {family}")
+
+
+FAMILY_FIELDS = {
+    "exact_cpu": "pareto_exact_cpu",
+    "exact_cpu_omp": "pareto_exact_cpu_omp",
+    "cpwa_cpu": "pareto_cpwa_cpu",
+    "cpwa_cpu_omp": "pareto_cpwa_cpu_omp",
+    "exact_gpu": "pareto_exact_gpu",
+    "cpwa_gpu": "pareto_cpwa_gpu",
+}
+
+
 for key, group in groups.items():
-    exact = [r for r in group if r["candidate_type"] == "exact"]
+    exact = [
+        r for r in group
+        if r["candidate_type"] == "exact"
+    ]
     surrogate = [
-        r for r in group if r["candidate_type"] == "surrogate"
+        r for r in group
+        if r["candidate_type"] == "surrogate"
     ]
 
     if len(exact) != 7:
         raise RuntimeError(
-            f"{key}: expected 7 exact candidates, found {len(exact)}"
+            f"{key}: expected 7 exact candidates, "
+            f"found {len(exact)}"
         )
 
     if len(surrogate) != 21:
@@ -292,11 +399,12 @@ for key, group in groups.items():
 
     if len(group) != 28:
         raise RuntimeError(
-            f"{key}: expected 28 total candidates, found {len(group)}"
+            f"{key}: expected 28 total candidates, "
+            f"found {len(group)}"
         )
 
-    # For every budget, all three execution backends must represent
-    # exactly the same mathematical approximation.
+    # All three CPWA backends at a given budget must represent the
+    # same mathematical approximation.
     for budget in BUDGETS:
         same = [
             r for r in surrogate
@@ -305,10 +413,11 @@ for key, group in groups.items():
 
         if len(same) != 3:
             raise RuntimeError(
-                f"{key} B{budget}: expected 3 CPWA backends"
+                f"{key}, B{budget}: expected 3 CPWA backends, "
+                f"found {len(same)}"
             )
 
-        errors = {
+        accuracy = {
             (
                 float(r["rmse"]),
                 float(r["p99_abs"]),
@@ -317,34 +426,70 @@ for key, group in groups.items():
             for r in same
         }
 
-        if len(errors) != 1:
+        if len(accuracy) != 1:
             raise RuntimeError(
-                f"{key} B{budget}: accuracy mismatch across backends"
+                f"{key}, B{budget}: CPWA accuracy mismatch"
             )
 
-    keep = nondominated(group)
+    # Global heterogeneous frontier.
+    global_keep = nondominated(group)
 
     for r in group:
-        r["pareto"] = id(r) in keep
+        r["pareto"] = id(r) in global_keep
 
-    # All exact candidates have RMSE zero, so exactly the fastest exact
-    # implementation must survive among the exact points.
-    exact_keep = [r for r in exact if r["pareto"]]
+    # Independent execution-family frontiers.
+    for family, field in FAMILY_FIELDS.items():
+        members = family_rows(group, family)
 
-    if len(exact_keep) != 1:
-        raise RuntimeError(
-            f"{key}: expected one exact Pareto point, "
-            f"found {len(exact_keep)}"
+        expected = {
+            "exact_cpu": 1,
+            "exact_cpu_omp": 4,
+            "cpwa_cpu": 7,
+            "cpwa_cpu_omp": 7,
+            "exact_gpu": 2,
+            "cpwa_gpu": 7,
+        }[family]
+
+        if len(members) != expected:
+            raise RuntimeError(
+                f"{key}: {family} expected {expected} candidates, "
+                f"found {len(members)}"
+            )
+
+        keep = nondominated(members)
+
+        for r in members:
+            r[field] = id(r) in keep
+
+    # Exact families live at RMSE=0.  Their family Pareto set must
+    # therefore contain exactly one fastest implementation.
+    for family in (
+        "exact_cpu",
+        "exact_cpu_omp",
+        "exact_gpu",
+    ):
+        field = FAMILY_FIELDS[family]
+        count = sum(
+            r[field]
+            for r in family_rows(group, family)
         )
 
-    fastest_exact = min(
-        exact,
-        key=lambda r: float(r["ns_per_eval"]),
-    )
+        if count != 1:
+            raise RuntimeError(
+                f"{key}: {family} has {count} Pareto points"
+            )
 
-    if exact_keep[0] is not fastest_exact:
+    # The global exact endpoint must likewise be the fastest exact
+    # implementation at this operating point.
+    exact_global = [
+        r for r in exact
+        if r["pareto"]
+    ]
+
+    if len(exact_global) != 1:
         raise RuntimeError(
-            f"{key}: surviving exact point is not fastest exact"
+            f"{key}: expected one global exact endpoint, "
+            f"found {len(exact_global)}"
         )
 
 
@@ -354,12 +499,14 @@ rows.sort(
         int(r["batch"]),
         float(r["rmse"]),
         float(r["ns_per_eval"]),
-        r["backend"],
-        str(r["budget"]),
+        r["method"],
     )
 )
 
-frontier = [r for r in rows if r["pareto"]]
+frontiers = [
+    r for r in rows
+    if r["pareto"]
+]
 
 write(OUT_CANDIDATES, rows)
-write(OUT_FRONTIERS, frontier)
+write(OUT_FRONTIERS, frontiers)
