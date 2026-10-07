@@ -13,6 +13,6 @@
 - [x] M11 — Analyze GPU resource-pressure transitions
 - [x] M12 — Generate figures
 - [x] M13 — Engineering synthesis
-- [ ] M14 — Evidence-only reproduction pipeline
+- [x] M14 — Evidence-only reproduction pipeline
 - [ ] M15 — Final report
 - [ ] M16 — Freeze Case Study 2 release

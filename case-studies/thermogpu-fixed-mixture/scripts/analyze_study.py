@@ -33,6 +33,147 @@ def one(rows, **conditions):
     return found[0]
 
 
+
+def write_synthesis(summary: dict) -> None:
+    first = summary["first_measured_surrogate_crossover"]
+    through = summary["throughput_regime_batch_1000000"]
+
+    lines = [
+        "# Engineering Synthesis",
+        "",
+        "## Central result",
+        "",
+        "When the computational complexity of the underlying EOS increases "
+        "while surrogate input dimension remains fixed at `(T, P)`, the "
+        "economic value of the hardware-executable surrogate increases "
+        "substantially.",
+        "",
+        "The result is workload-dependent. At batch 1, the best exact "
+        "implementation dominates every measured surrogate for C1-C5. "
+        "By batch 100, at least one surrogate is faster than the best exact "
+        "implementation for every mixture.",
+        "",
+        "## First measured crossover",
+        "",
+        "| Mixture | Batch | Budget | RMSE | Speedup |",
+        "|---|---:|---:|---:|---:|",
+    ]
+
+    for c in range(1, 6):
+        r = first[f"C{c}"]
+        lines.append(
+            f"| C{c} | {r['batch']:,} | {r['budget']} | "
+            f"{r['rmse']:.6g} | {r['speedup']:.2f}x |"
+        )
+
+    lines += [
+        "",
+        "C4 and C5 already admit a narrowly faster surrogate at batch 10, "
+        "although only at relatively loose measured accuracy. C1-C3 first "
+        "cross over at batch 100.",
+        "",
+        "## Throughput regime",
+        "",
+        "At batch 1,000,000:",
+        "",
+        "| Mixture | Best exact ns/eval | Most accurate faster RMSE | "
+        "Speedup at that accuracy | Maximum measured speedup |",
+        "|---|---:|---:|---:|---:|",
+    ]
+
+    for c in range(1, 6):
+        r = through[f"C{c}"]
+        lines.append(
+            f"| C{c} | {r['best_exact_ns_per_eval']:.3f} | "
+            f"{r['most_accurate_faster_rmse']:.6g} | "
+            f"{r['most_accurate_faster_speedup']:.2f}x | "
+            f"{r['max_speedup']:.2f}x |"
+        )
+
+    lines += [
+        "",
+        "The maximum measured speedup rises from 45.35x for C1 to "
+        "136.06x for C5. More importantly, the higher-component mixtures "
+        "retain substantial speedups at much tighter accuracy than the "
+        "fastest low-budget surrogate.",
+        "",
+        "## Why mixture complexity changes the economics",
+        "",
+        "The direct Peng-Robinson calculation becomes more expensive as "
+        "additional mixture components are introduced. The surrogate, "
+        "however, continues to approximate a two-dimensional mapping from "
+        "`(T, P)` to `Z`. Its evaluation cost is therefore governed primarily "
+        "by the complexity of the synthesized CPWA function rather than by "
+        "the component count of the original EOS.",
+        "",
+        "The measured results consequently separate physical-model complexity "
+        "from surrogate input dimension: increasing the former makes direct "
+        "physics more expensive without causing a corresponding growth in "
+        "the dimensionality of the surrogate problem.",
+        "",
+        "## High-accuracy hardware resource transition",
+        "",
+        "B96 to B128 produces a consistent hardware transition across all five "
+        "mixtures. Every B96 kernel is already using 255 registers. B128 "
+        "retains that register count but sharply increases local-memory "
+        "spilling:",
+        "",
+        "| Mixture | Spill bytes B96 | Spill bytes B128 | "
+        "Stack B96 | Stack B128 |",
+        "|---|---:|---:|---:|---:|",
+    ]
+
+    for c in range(1, 6):
+        r = summary["resource_transition_b96_to_b128"][f"C{c}"]
+        lines.append(
+            f"| C{c} | {r['spill_store_bytes_b96']} | "
+            f"{r['spill_store_bytes_b128']} | "
+            f"{r['stack_frame_bytes_b96']} | "
+            f"{r['stack_frame_bytes_b128']} |"
+        )
+
+    lines += [
+        "",
+        "Thus additional approximation accuracy is not free even when the "
+        "input dimension remains fixed. At sufficiently high CPWA complexity, "
+        "the generated kernel encounters a hardware resource boundary. The "
+        "observed spilling is strongly associated with the B128 execution-cost "
+        "increase, although this study does not establish spilling as the sole "
+        "causal mechanism.",
+        "",
+        "## Engineering interpretation",
+        "",
+        "There are therefore two distinct crossovers. The first is between "
+        "direct physics and approximation: enough repeated work is required "
+        "for GPU execution overhead to cease dominating surrogate cost. "
+        "The second occurs within the surrogate family itself: increasing "
+        "approximation complexity eventually encounters GPU resource pressure, "
+        "making the next increment of accuracy disproportionately expensive.",
+        "",
+        "The appropriate surrogate is consequently not simply the most accurate "
+        "one available. It is an operating-point decision involving required "
+        "accuracy, workload size, physical-model complexity, and generated-kernel "
+        "resource cost.",
+        "",
+        "## Scope and limitations",
+        "",
+    ]
+
+    for item in summary["limitations"]:
+        lines.append(f"- {item}")
+
+    lines += [
+        "",
+        "These conclusions apply to the measured fixed-composition, "
+        "two-dimensional `(T, P)` problem and should not be generalized "
+        "directly to variable-composition EOS surrogates.",
+        "",
+    ]
+
+    out = STUDY / "ENGINEERING-SYNTHESIS.md"
+    out.write_text("\n".join(lines))
+    print(out)
+
 def main():
     exact = read("exact-crossover.csv")
     surrogate = read("surrogate-performance.csv")
@@ -214,6 +355,9 @@ def main():
     out = PROCESSED / "study-summary.json"
     out.write_text(json.dumps(summary, indent=2) + "\n")
     print(out)
+
+    write_synthesis(summary)
+
     print("study synthesis: PASS")
 
 

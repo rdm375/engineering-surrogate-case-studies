@@ -54,7 +54,7 @@ Thus additional approximation accuracy is not free even when the input dimension
 
 ## Engineering interpretation
 
-There are therefore two distinct crossovers. The first is between direct physics and approximation: enough repeated work is required to amortize the surrogate's GPU execution overhead. The second occurs within the surrogate family itself: increasing approximation complexity eventually encounters GPU resource pressure, making the next increment of accuracy disproportionately expensive.
+There are therefore two distinct crossovers. The first is between direct physics and approximation: enough repeated work is required for GPU execution overhead to cease dominating surrogate cost. The second occurs within the surrogate family itself: increasing approximation complexity eventually encounters GPU resource pressure, making the next increment of accuracy disproportionately expensive.
 
 The appropriate surrogate is consequently not simply the most accurate one available. It is an operating-point decision involving required accuracy, workload size, physical-model complexity, and generated-kernel resource cost.
 
