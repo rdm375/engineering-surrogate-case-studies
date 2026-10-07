@@ -9,8 +9,8 @@
 - [x] M7 — Process exact performance
 - [x] M8 — Process surrogate performance
 - [x] M9 — Construct 35 batch-conditioned Pareto frontiers
-- [ ] M10 — Analyze exact/surrogate crossover
-- [ ] M11 — Analyze GPU resource-pressure transitions
+- [x] M10 — Analyze exact/surrogate crossover
+- [x] M11 — Analyze GPU resource-pressure transitions
 - [ ] M12 — Generate figures
 - [ ] M13 — Engineering synthesis
 - [ ] M14 — Evidence-only reproduction pipeline
