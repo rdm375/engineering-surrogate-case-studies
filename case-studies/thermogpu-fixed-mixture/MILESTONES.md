@@ -12,7 +12,7 @@
 - [x] M10 — Analyze exact/surrogate crossover
 - [x] M11 — Analyze GPU resource-pressure transitions
 - [x] M12 — Generate figures
-- [ ] M13 — Engineering synthesis
+- [x] M13 — Engineering synthesis
 - [ ] M14 — Evidence-only reproduction pipeline
 - [ ] M15 — Final report
 - [ ] M16 — Freeze Case Study 2 release

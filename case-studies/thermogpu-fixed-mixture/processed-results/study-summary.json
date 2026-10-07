@@ -1,0 +1,295 @@
+{
+  "study": "Fixed-Composition Multicomponent EOS",
+  "case_study": 2,
+  "central_question": "How does the economic value of a hardware-executable surrogate change as computational complexity of the underlying physical model increases while surrogate input dimension remains fixed?",
+  "components": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "batches": [
+    1,
+    10,
+    100,
+    1000,
+    10000,
+    100000,
+    1000000
+  ],
+  "surrogate_input_dimension": 2,
+  "surrogate_inputs": [
+    "temperature",
+    "pressure"
+  ],
+  "first_measured_surrogate_crossover": {
+    "C1": {
+      "batch": 100,
+      "budget": 96,
+      "rmse": 0.00034104209185099004,
+      "speedup": 1.1425472858245942
+    },
+    "C2": {
+      "batch": 100,
+      "budget": 96,
+      "rmse": 0.00046562592472402674,
+      "speedup": 1.418737279592282
+    },
+    "C3": {
+      "batch": 100,
+      "budget": 96,
+      "rmse": 0.0005609796870602037,
+      "speedup": 1.1970210289463712
+    },
+    "C4": {
+      "batch": 10,
+      "budget": 16,
+      "rmse": 0.00715352067918386,
+      "speedup": 1.0251187878017871
+    },
+    "C5": {
+      "batch": 10,
+      "budget": 24,
+      "rmse": 0.0029718217173072673,
+      "speedup": 1.0215594870681437
+    }
+  },
+  "throughput_regime_batch_1000000": {
+    "C1": {
+      "best_exact_ns_per_eval": 8.348875833333333,
+      "most_accurate_faster_budget": 96,
+      "most_accurate_faster_rmse": 0.00034104209185099004,
+      "most_accurate_faster_speedup": 2.5170749803479917,
+      "fastest_surrogate_budget": 16,
+      "fastest_surrogate_rmse": 0.005035772712008456,
+      "fastest_surrogate_ns_per_eval": 0.184095994,
+      "max_speedup": 45.35066544323247
+    },
+    "C2": {
+      "best_exact_ns_per_eval": 12.098191470588235,
+      "most_accurate_faster_budget": 128,
+      "most_accurate_faster_rmse": 0.0003133773291002309,
+      "most_accurate_faster_speedup": 1.5267351886142735,
+      "fastest_surrogate_budget": 16,
+      "fastest_surrogate_rmse": 0.0064544384954823295,
+      "fastest_surrogate_ns_per_eval": 0.173184007,
+      "max_speedup": 69.85744053484242
+    },
+    "C3": {
+      "best_exact_ns_per_eval": 16.66444807692308,
+      "most_accurate_faster_budget": 128,
+      "most_accurate_faster_rmse": 0.00038870413960664154,
+      "most_accurate_faster_speedup": 1.9657926056213948,
+      "fastest_surrogate_budget": 16,
+      "fastest_surrogate_rmse": 0.007666704070839694,
+      "fastest_surrogate_ns_per_eval": 0.167584002,
+      "max_speedup": 99.43937295949692
+    },
+    "C4": {
+      "best_exact_ns_per_eval": 21.9412993,
+      "most_accurate_faster_budget": 128,
+      "most_accurate_faster_rmse": 0.00035473724273915217,
+      "most_accurate_faster_speedup": 5.2342881431951165,
+      "fastest_surrogate_budget": 16,
+      "fastest_surrogate_rmse": 0.00715352067918386,
+      "fastest_surrogate_ns_per_eval": 0.184896007,
+      "max_speedup": 118.6683241893915
+    },
+    "C5": {
+      "best_exact_ns_per_eval": 28.07033575,
+      "most_accurate_faster_budget": 128,
+      "most_accurate_faster_rmse": 0.00035934251615852214,
+      "most_accurate_faster_speedup": 2.049379597720285,
+      "fastest_surrogate_budget": 16,
+      "fastest_surrogate_rmse": 0.0077713676770929385,
+      "fastest_surrogate_ns_per_eval": 0.206303999,
+      "max_speedup": 136.06297447486708
+    }
+  },
+  "best_exact_ns_per_eval_batch_1000000": {
+    "C1": 8.348875833333333,
+    "C2": 12.098191470588235,
+    "C3": 16.66444807692308,
+    "C4": 21.9412993,
+    "C5": 28.07033575
+  },
+  "surrogate_ns_per_eval_batch_1000000": {
+    "B16": {
+      "C1": 0.184095994,
+      "C2": 0.173184007,
+      "C3": 0.167584002,
+      "C4": 0.184896007,
+      "C5": 0.206303999
+    },
+    "B64": {
+      "C1": 2.14374399,
+      "C2": 2.38425589,
+      "C3": 1.848032,
+      "C4": 2.2934401,
+      "C5": 2.32672
+    },
+    "B96": {
+      "C1": 3.31689596,
+      "C2": 3.1288321,
+      "C3": 2.99219203,
+      "C4": 3.21366405,
+      "C5": 4.07615995
+    },
+    "B128": {
+      "C1": 9.25743961,
+      "C2": 7.9242239,
+      "C3": 8.47721577,
+      "C4": 4.19184017,
+      "C5": 13.6969919
+    }
+  },
+  "geometry_at_budget_128": {
+    "C1": {
+      "rmse": 0.0002582874077028154,
+      "points": 128,
+      "simplices": 221,
+      "dag_nodes": 2031
+    },
+    "C2": {
+      "rmse": 0.0003133773291002309,
+      "points": 128,
+      "simplices": 225,
+      "dag_nodes": 1999
+    },
+    "C3": {
+      "rmse": 0.00038870413960664154,
+      "points": 128,
+      "simplices": 223,
+      "dag_nodes": 2130
+    },
+    "C4": {
+      "rmse": 0.00035473724273915217,
+      "points": 128,
+      "simplices": 224,
+      "dag_nodes": 2043
+    },
+    "C5": {
+      "rmse": 0.00035934251615852214,
+      "points": 128,
+      "simplices": 225,
+      "dag_nodes": 2193
+    }
+  },
+  "resource_transition_b96_to_b128": {
+    "C1": {
+      "rmse_b96": 0.00034104209185099004,
+      "rmse_b128": 0.0002582874077028154,
+      "registers_b96": 255,
+      "registers_b128": 255,
+      "spill_store_bytes_b96": 8,
+      "spill_store_bytes_b128": 676,
+      "stack_frame_bytes_b96": 8,
+      "stack_frame_bytes_b128": 680
+    },
+    "C2": {
+      "rmse_b96": 0.00046562592472402674,
+      "rmse_b128": 0.0003133773291002309,
+      "registers_b96": 255,
+      "registers_b128": 255,
+      "spill_store_bytes_b96": 0,
+      "spill_store_bytes_b128": 564,
+      "stack_frame_bytes_b96": 0,
+      "stack_frame_bytes_b128": 568
+    },
+    "C3": {
+      "rmse_b96": 0.0005609796870602037,
+      "rmse_b128": 0.00038870413960664154,
+      "registers_b96": 255,
+      "registers_b128": 255,
+      "spill_store_bytes_b96": 48,
+      "spill_store_bytes_b128": 420,
+      "stack_frame_bytes_b96": 48,
+      "stack_frame_bytes_b128": 424
+    },
+    "C4": {
+      "rmse_b96": 0.0005388511769559827,
+      "rmse_b128": 0.00035473724273915217,
+      "registers_b96": 255,
+      "registers_b128": 255,
+      "spill_store_bytes_b96": 0,
+      "spill_store_bytes_b128": 124,
+      "stack_frame_bytes_b96": 0,
+      "stack_frame_bytes_b128": 128
+    },
+    "C5": {
+      "rmse_b96": 0.000591866530543988,
+      "rmse_b128": 0.00035934251615852214,
+      "registers_b96": 255,
+      "registers_b128": 255,
+      "spill_store_bytes_b96": 156,
+      "spill_store_bytes_b128": 724,
+      "stack_frame_bytes_b96": 160,
+      "stack_frame_bytes_b128": 728
+    }
+  },
+  "pareto_point_counts": {
+    "C1": {
+      "1": 1,
+      "10": 1,
+      "100": 7,
+      "1000": 7,
+      "10000": 8,
+      "100000": 7,
+      "1000000": 7
+    },
+    "C2": {
+      "1": 1,
+      "10": 1,
+      "100": 7,
+      "1000": 8,
+      "10000": 8,
+      "100000": 8,
+      "1000000": 8
+    },
+    "C3": {
+      "1": 1,
+      "10": 1,
+      "100": 7,
+      "1000": 8,
+      "10000": 8,
+      "100000": 8,
+      "1000000": 8
+    },
+    "C4": {
+      "1": 1,
+      "10": 2,
+      "100": 8,
+      "1000": 8,
+      "10000": 8,
+      "100000": 8,
+      "1000000": 8
+    },
+    "C5": {
+      "1": 1,
+      "10": 3,
+      "100": 7,
+      "1000": 8,
+      "10000": 8,
+      "100000": 8,
+      "1000000": 8
+    }
+  },
+  "pareto_total_points": 206,
+  "interpretation": {
+    "scalar_latency": "At batch 1, the best exact implementation dominates all measured surrogates for C1-C5.",
+    "workload_crossover": "At batch 100, at least one measured surrogate is faster than the best exact implementation for every mixture C1-C5.",
+    "complexity_effect": "As component count increases while surrogate input dimension remains fixed at (T,P), direct EOS cost increases substantially while surrogate evaluation cost remains comparatively insensitive to component count.",
+    "resource_limit": "At B96 all five measured surrogate kernels use 255 registers. Moving to B128 sharply increases spilling for every mixture, coincident with a substantial high-accuracy execution-cost penalty."
+  },
+  "limitations": [
+    "Composition is fixed for each mixture; the surrogate input space is only (T,P).",
+    "The distinct C1-C5 family changes both component count and species identity.",
+    "Binary interaction coefficients are zero.",
+    "The surrogate predicts Z, while the exact EOS path computes richer thermodynamic output.",
+    "Accuracy thresholds are selected only from measured TDAR budgets; no interpolation is used.",
+    "Direct and surrogate resident-GPU timing harnesses have comparable intent but are not identical.",
+    "Results represent one measured hardware/software environment.",
+    "Register spilling is strongly associated with the B128 slowdown but is not established here as the sole causal mechanism."
+  ]
+}
