@@ -1,0 +1,18 @@
+# Case Study 2 Milestones
+
+- [x] M1 — Define engineering question
+- [x] M2 — Freeze TDAR approximation evidence
+- [x] M3 — Complete exact mixture scaling benchmark
+- [x] M4 — Complete 35-artifact surrogate hardware sweep
+- [x] M5 — Validate ThermoGPU upstream test suite
+- [ ] M6 — Import and inventory retained evidence
+- [ ] M7 — Process exact performance
+- [ ] M8 — Process surrogate performance
+- [ ] M9 — Construct 35 batch-conditioned Pareto frontiers
+- [ ] M10 — Analyze exact/surrogate crossover
+- [ ] M11 — Analyze GPU resource-pressure transitions
+- [ ] M12 — Generate figures
+- [ ] M13 — Engineering synthesis
+- [ ] M14 — Evidence-only reproduction pipeline
+- [ ] M15 — Final report
+- [ ] M16 — Freeze Case Study 2 release
