@@ -15,4 +15,4 @@
 - [x] M13 — Engineering synthesis
 - [x] M14 — Evidence-only reproduction pipeline
 - [x] M15 — Final report
-- [ ] M16 — Freeze Case Study 2 release
+- [x] M16 — Freeze Case Study 2 release
