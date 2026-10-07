@@ -37,6 +37,7 @@ DERIVED_FILES = (
     PROCESSED / "resource-pressure.csv",
     PROCESSED / "study-summary.json",
     STUDY / "ENGINEERING-SYNTHESIS.md",
+    STUDY / "reports/thermogpu-fixed-mixture-v1.md",
 )
 
 FIGURE_FILES = (
@@ -215,6 +216,10 @@ def validate() -> None:
     if synthesis.stat().st_size == 0:
         raise RuntimeError("engineering synthesis is empty")
 
+    report = STUDY / "reports/thermogpu-fixed-mixture-v1.md"
+    if report.stat().st_size == 0:
+        raise RuntimeError("final report is empty")
+
     for figure in FIGURE_FILES:
         if figure.stat().st_size == 0:
             raise RuntimeError(f"empty figure: {figure.name}")
@@ -226,6 +231,7 @@ def validate() -> None:
     print("derived figures: 6 PASS")
     print("study summary: PASS")
     print("engineering synthesis: PASS")
+    print("final report: PASS")
 
 
 def reproduce() -> None:
@@ -245,6 +251,7 @@ def reproduce() -> None:
     run("process_crossover_resources.py")
     run("analyze_study.py")
     run("plot_study.py")
+    run("generate_report.py")
 
     validate()
 
