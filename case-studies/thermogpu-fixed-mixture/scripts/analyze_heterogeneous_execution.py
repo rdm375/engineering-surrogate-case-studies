@@ -281,3 +281,113 @@ for components in range(1, 6):
 
 write_csv(REGIMES, regimes)
 print(f"wrote {len(regimes)} rows: {REGIMES}")
+
+# ---------------------------------------------------------------------------
+# High-budget backend scaling: B96 -> B128 at batch 1,000,000.
+#
+# This isolates whether execution cost grows in proportion to the realized
+# CPWA DAG or whether a backend's cost per DAG node changes at high budget.
+# ---------------------------------------------------------------------------
+
+SCALING = PROCESSED / "high-budget-backend-scaling.csv"
+
+CPU_EVIDENCE = (
+    STUDY / "evidence/native-cpu-surrogate/summary.csv"
+)
+
+with CPU_EVIDENCE.open(newline="") as f:
+    cpu_rows = list(csv.DictReader(f))
+
+cpu_lookup = {
+    (
+        int(r["components"]),
+        int(r["budget"]),
+        int(r["batch"]),
+        r["policy"],
+    ): r
+    for r in cpu_rows
+}
+
+cuda_lookup = {
+    (
+        int(r["components"]),
+        int(r["budget"]),
+        int(r["batch"]),
+    ): r
+    for r in surrogate
+}
+
+scaling_rows = []
+batch = 1_000_000
+
+for components in range(1, 6):
+    a96 = cpu_lookup[(components, 96, batch, "avx2")]
+    a128 = cpu_lookup[(components, 128, batch, "avx2")]
+    o96 = cpu_lookup[(components, 96, batch, "avx2-omp4")]
+    o128 = cpu_lookup[(components, 128, batch, "avx2-omp4")]
+    g96 = cuda_lookup[(components, 96, batch)]
+    g128 = cuda_lookup[(components, 128, batch)]
+
+    nodes96 = int(g96["dag_nodes"])
+    nodes128 = int(g128["dag_nodes"])
+
+    # The CPU and CUDA measurements must refer to exactly the same DAG.
+    for row in (a96, o96):
+        if int(row["nodes"]) != nodes96:
+            raise RuntimeError(
+                f"C{components} B96 DAG-node mismatch"
+            )
+
+    for row in (a128, o128):
+        if int(row["nodes"]) != nodes128:
+            raise RuntimeError(
+                f"C{components} B128 DAG-node mismatch"
+            )
+
+    node_ratio = nodes128 / nodes96
+
+    avx2_96 = float(a96["ns_per_eval"])
+    avx2_128 = float(a128["ns_per_eval"])
+    omp4_96 = float(o96["ns_per_eval"])
+    omp4_128 = float(o128["ns_per_eval"])
+    cuda_96 = float(g96["ns_per_eval"])
+    cuda_128 = float(g128["ns_per_eval"])
+
+    avx2_ratio = avx2_128 / avx2_96
+    omp4_ratio = omp4_128 / omp4_96
+    cuda_ratio = cuda_128 / cuda_96
+
+    scaling_rows.append(
+        {
+            "components": components,
+            "batch": batch,
+            "budget_from": 96,
+            "budget_to": 128,
+            "nodes_96": nodes96,
+            "nodes_128": nodes128,
+            "node_growth": node_ratio,
+            "avx2_ns_96": avx2_96,
+            "avx2_ns_128": avx2_128,
+            "avx2_growth": avx2_ratio,
+            "avx2_cost_per_node_change": avx2_ratio / node_ratio,
+            "omp4_ns_96": omp4_96,
+            "omp4_ns_128": omp4_128,
+            "omp4_growth": omp4_ratio,
+            "omp4_cost_per_node_change": omp4_ratio / node_ratio,
+            "cuda_ns_96": cuda_96,
+            "cuda_ns_128": cuda_128,
+            "cuda_growth": cuda_ratio,
+            "cuda_cost_per_node_change": cuda_ratio / node_ratio,
+            "registers_96": int(g96["registers"]),
+            "registers_128": int(g128["registers"]),
+            "spill_store_bytes_96": int(g96["spill_store_bytes"]),
+            "spill_store_bytes_128": int(g128["spill_store_bytes"]),
+            "spill_load_bytes_96": int(g96["spill_load_bytes"]),
+            "spill_load_bytes_128": int(g128["spill_load_bytes"]),
+            "stack_frame_bytes_96": int(g96["stack_frame_bytes"]),
+            "stack_frame_bytes_128": int(g128["stack_frame_bytes"]),
+        }
+    )
+
+write_csv(SCALING, scaling_rows)
+print(f"wrote {len(scaling_rows)} rows: {SCALING}")
