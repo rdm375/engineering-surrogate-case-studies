@@ -1,0 +1,31 @@
+{
+  "artifact": "/nvme/Sync/ThermoGPU/benchmarks/results-distinct-mixture-hardware-sweep/c2-b24/c2-b24-cpsat.cpwa",
+  "schedule": "min-live",
+  "backend": "explicit-avx2-openmp",
+  "vector_width_float32": 8,
+  "policies": {
+    "avx2": 0,
+    "avx2-omp4": 4
+  },
+  "compiler": "g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+  "compile_command": [
+    "g++",
+    "-O3",
+    "-march=native",
+    "-fopenmp",
+    "-std=c++17",
+    "/tmp/cpwa-avx2-omp4-fixed-mixture/c2-b24/fused_avx2.cpp",
+    "-o",
+    "/tmp/cpwa-avx2-omp4-fixed-mixture/c2-b24/fused_avx2"
+  ],
+  "machine": "x86_64",
+  "processor": "",
+  "metrics": {
+    "input_dim": 2,
+    "nodes": 133,
+    "affine_nodes": 40,
+    "min_nodes": 76,
+    "max_nodes": 17,
+    "live_slots": 33
+  }
+}

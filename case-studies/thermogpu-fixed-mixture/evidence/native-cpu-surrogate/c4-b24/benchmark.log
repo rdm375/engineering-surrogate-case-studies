@@ -1,0 +1,35 @@
+{"batch":100,"threads":0,"calls_per_sample":20000,"median_seconds":0.02628494,"ns_per_eval":13.142469999999999,"checksum":86.044739961624146}
+{"batch":1000,"threads":0,"calls_per_sample":4288,"median_seconds":0.050415773999999997,"ns_per_eval":11.757409981343283,"checksum":855.49700051546097}
+{"batch":10000,"threads":0,"calls_per_sample":216,"median_seconds":0.025239273999999999,"ns_per_eval":11.684849074074075,"checksum":8517.7495605945587}
+{"batch":100000,"threads":0,"calls_per_sample":22,"median_seconds":0.025817830999999999,"ns_per_eval":11.735377727272727,"checksum":85147.869884669781}
+{"batch":1000000,"threads":0,"calls_per_sample":3,"median_seconds":0.035947600000000003,"ns_per_eval":11.982533333333333,"checksum":852025.6689132452}
+{"batch":100,"threads":4,"calls_per_sample":9772,"median_seconds":0.03121989,"ns_per_eval":31.948311502251329,"checksum":86.044739961624146}
+{"batch":1000,"threads":4,"calls_per_sample":4509,"median_seconds":0.026157412000000001,"ns_per_eval":5.8011559104014196,"checksum":855.49700051546097}
+{"batch":10000,"threads":4,"calls_per_sample":793,"median_seconds":0.027088594000000001,"ns_per_eval":3.4159639344262294,"checksum":8517.7495605945587}
+{"batch":100000,"threads":4,"calls_per_sample":158,"median_seconds":0.050351504999999998,"ns_per_eval":3.1868041139240506,"checksum":85147.869884669781}
+{"batch":1000000,"threads":4,"calls_per_sample":10,"median_seconds":0.032057839999999997,"ns_per_eval":3.2057839999999995,"checksum":852025.6689132452}
+artifact: /nvme/Sync/ThermoGPU/benchmarks/results-distinct-mixture-hardware-sweep/c4-b24/c4-b24-cpsat.cpwa
+nodes: 159
+affine: 40
+min: 97
+max: 22
+live_slots: 35
+
+compile:
+g++ -O3 -march=native -fopenmp -std=c++17 /tmp/cpwa-avx2-omp4-fixed-mixture/c4-b24/fused_avx2.cpp -o /tmp/cpwa-avx2-omp4-fixed-mixture/c4-b24/fused_avx2
+
+===== VALIDATION =====
+{
+  "points": 10000,
+  "exact_matches": 8655,
+  "mismatch_count": 1345,
+  "max_abs_delta": 1.7881393432617188e-07,
+  "reference_checksum": 8517.749555885792,
+  "generated_checksum": 8517.749560594559
+}
+
+===== BENCHMARK =====
+
+--- policy=avx2 ---
+
+--- policy=avx2-omp4 ---

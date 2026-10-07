@@ -1,0 +1,35 @@
+{"batch":100,"threads":0,"calls_per_sample":2112,"median_seconds":0.025839669999999999,"ns_per_eval":122.34692234848485,"checksum":86.068626403808594}
+{"batch":1000,"threads":0,"calls_per_sample":480,"median_seconds":0.050161645999999997,"ns_per_eval":104.50342916666666,"checksum":855.76230317354202}
+{"batch":10000,"threads":0,"calls_per_sample":25,"median_seconds":0.026285045999999999,"ns_per_eval":105.140184,"checksum":8521.3215940594673}
+{"batch":100000,"threads":0,"calls_per_sample":3,"median_seconds":0.03137881,"ns_per_eval":104.59603333333334,"checksum":85184.701024770737}
+{"batch":1000000,"threads":0,"calls_per_sample":1,"median_seconds":0.10437062699999999,"ns_per_eval":104.370627,"checksum":852382.98701357841}
+{"batch":100,"threads":4,"calls_per_sample":5178,"median_seconds":0.03645404,"ns_per_eval":70.401776747779067,"checksum":86.068626403808594}
+{"batch":1000,"threads":4,"calls_per_sample":848,"median_seconds":0.026170490000000001,"ns_per_eval":30.861426886792454,"checksum":855.76230317354202}
+{"batch":10000,"threads":4,"calls_per_sample":106,"median_seconds":0.029942781000000002,"ns_per_eval":28.247906603773586,"checksum":8521.3215940594673}
+{"batch":100000,"threads":4,"calls_per_sample":10,"median_seconds":0.028320912,"ns_per_eval":28.320912,"checksum":85184.701024770737}
+{"batch":1000000,"threads":4,"calls_per_sample":1,"median_seconds":0.028698978,"ns_per_eval":28.698978,"checksum":852382.98701357841}
+artifact: /nvme/Sync/ThermoGPU/benchmarks/results-distinct-mixture-hardware-sweep/c4-b96/c4-b96-cpsat.cpwa
+nodes: 1308
+affine: 166
+min: 986
+max: 156
+live_slots: 254
+
+compile:
+g++ -O3 -march=native -fopenmp -std=c++17 /tmp/cpwa-avx2-omp4-fixed-mixture/c4-b96/fused_avx2.cpp -o /tmp/cpwa-avx2-omp4-fixed-mixture/c4-b96/fused_avx2
+
+===== VALIDATION =====
+{
+  "points": 10000,
+  "exact_matches": 8765,
+  "mismatch_count": 1235,
+  "max_abs_delta": 1.1920928955078125e-07,
+  "reference_checksum": 8521.321602344513,
+  "generated_checksum": 8521.321594059467
+}
+
+===== BENCHMARK =====
+
+--- policy=avx2 ---
+
+--- policy=avx2-omp4 ---

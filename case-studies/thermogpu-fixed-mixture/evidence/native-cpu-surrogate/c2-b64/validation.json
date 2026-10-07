@@ -1,0 +1,8 @@
+{
+  "points": 10000,
+  "exact_matches": 8967,
+  "mismatch_count": 1033,
+  "max_abs_delta": 1.1920928955078125e-07,
+  "reference_checksum": 8654.26689863205,
+  "generated_checksum": 8654.266897916794
+}

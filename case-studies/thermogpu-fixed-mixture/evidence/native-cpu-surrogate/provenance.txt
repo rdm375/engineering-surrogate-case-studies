@@ -1,0 +1,30 @@
+Case Study 2 native CPU surrogate execution evidence
+
+Generated from cpwa-relu:
+d4ac304b3656fa2848994960922b3193cb45ca60
+v0.2.0-3-gd4ac304
+
+Branch:
+threaded-vector-cpu-cpwa
+
+Compiler:
+g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+Kernel compilation:
+g++ -O3 -march=native -fopenmp -std=c++17
+
+Execution policies:
+avx2       explicit AVX2, one thread
+avx2-omp4  explicit AVX2, OpenMP four threads
+
+Batches:
+100 1000 10000 100000 1000000
+
+Budgets:
+16 24 32 48 64 96 128
+
+Mixtures:
+C1 C2 C3 C4 C5 distinct fixed-composition mixtures
+
+Validation points per artifact:
+10000

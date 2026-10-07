@@ -1,0 +1,35 @@
+{"batch":100,"threads":0,"calls_per_sample":20000,"median_seconds":0.029269305999999998,"ns_per_eval":14.634653,"checksum":85.196487069129944}
+{"batch":1000,"threads":0,"calls_per_sample":2000,"median_seconds":0.026183181,"ns_per_eval":13.091590500000001,"checksum":846.69712853431702}
+{"batch":10000,"threads":0,"calls_per_sample":200,"median_seconds":0.026144297,"ns_per_eval":13.072148500000001,"checksum":8427.1457789540291}
+{"batch":100000,"threads":0,"calls_per_sample":20,"median_seconds":0.026293463,"ns_per_eval":13.1467315,"checksum":84239.556396842003}
+{"batch":1000000,"threads":0,"calls_per_sample":2,"median_seconds":0.026767191999999999,"ns_per_eval":13.383596000000001,"checksum":842981.01631003618}
+{"batch":100,"threads":4,"calls_per_sample":8834,"median_seconds":0.026652715,"ns_per_eval":30.170607878650667,"checksum":85.196487069129944}
+{"batch":1000,"threads":4,"calls_per_sample":7544,"median_seconds":0.054859924999999997,"ns_per_eval":7.2719943001060443,"checksum":846.69712853431702}
+{"batch":10000,"threads":4,"calls_per_sample":437,"median_seconds":0.015822955,"ns_per_eval":3.6208135011441649,"checksum":8427.1457789540291}
+{"batch":100000,"threads":4,"calls_per_sample":79,"median_seconds":0.026644927999999998,"ns_per_eval":3.3727756962025315,"checksum":84239.556396842003}
+{"batch":1000000,"threads":4,"calls_per_sample":7,"median_seconds":0.023841727,"ns_per_eval":3.405961,"checksum":842981.01631003618}
+artifact: /nvme/Sync/ThermoGPU/benchmarks/results-distinct-mixture-hardware-sweep/c3-b24/c3-b24-cpsat.cpwa
+nodes: 164
+affine: 40
+min: 101
+max: 23
+live_slots: 37
+
+compile:
+g++ -O3 -march=native -fopenmp -std=c++17 /tmp/cpwa-avx2-omp4-fixed-mixture/c3-b24/fused_avx2.cpp -o /tmp/cpwa-avx2-omp4-fixed-mixture/c3-b24/fused_avx2
+
+===== VALIDATION =====
+{
+  "points": 10000,
+  "exact_matches": 8655,
+  "mismatch_count": 1345,
+  "max_abs_delta": 1.1920928955078125e-07,
+  "reference_checksum": 8427.14578038454,
+  "generated_checksum": 8427.145778954029
+}
+
+===== BENCHMARK =====
+
+--- policy=avx2 ---
+
+--- policy=avx2-omp4 ---
