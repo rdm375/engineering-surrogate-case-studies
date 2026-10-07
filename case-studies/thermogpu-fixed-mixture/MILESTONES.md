@@ -6,8 +6,8 @@
 - [x] M4 — Complete 35-artifact surrogate hardware sweep
 - [x] M5 — Validate ThermoGPU upstream test suite
 - [x] M6 — Import and inventory retained evidence
-- [ ] M7 — Process exact performance
-- [ ] M8 — Process surrogate performance
+- [x] M7 — Process exact performance
+- [x] M8 — Process surrogate performance
 - [ ] M9 — Construct 35 batch-conditioned Pareto frontiers
 - [ ] M10 — Analyze exact/surrogate crossover
 - [ ] M11 — Analyze GPU resource-pressure transitions
